@@ -17,19 +17,21 @@ def go_black(start=0):
                         break
             at += 1
 
-# left off at 373
-def go_white(start=0):
+# left off at 5363
+def go_white(start=0, ing=False):
     at = 0
     with open('cah.tsv') as f, open('white.csv', 'a+') as w:
         for line in f:
             if at >= start:
-                print('at: {}'.format(at))
                 card = line.split('\t')[6].replace('"', '').replace('“', '"').replace('”', '"')
                 if card[0] == '"' and card[-1] == '"':
                     card = card[1:-1]
                 if card[-1] == '.':
                     card = card[:-1]
                 card = card.capitalize()
+                if ing and 'ing' not in card:
+                    continue
+                print('at: {}'.format(at))
                 print('white card: {}'.format(card))
                 response = input()
                 if str(response) == 'y':
