@@ -12,7 +12,7 @@ No settings; predefined values
 */
 
 #include "pipe_networking.h"
-#include "helpers.c"
+#include "helpers.h"
 
 static void sighandler(int signo) {
   if (signo == SIGINT) {
@@ -29,6 +29,10 @@ int main() {
 
   // set ctrl-c signal
   signal(SIGINT, sighandler);
+
+  // array of black and white cards
+  char ** black_cards = get_black_cards();
+  char ** white_cards = get_white_cards();
 
   // array of file descriptors for pipes to/from clients
   int* to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
