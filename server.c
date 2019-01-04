@@ -12,6 +12,7 @@ No settings; predefined values
 */
 
 #include "pipe_networking.h"
+#include "helpers.c"
 
 static void sighandler(int signo) {
   if (signo == SIGINT) {
@@ -40,4 +41,14 @@ int main() {
     player_count++;
   }
   printf("all clients connected\n");
+
+  // broadcasting example
+  int i;
+  for (i = 0; i < 3; i++) {
+    char* t = calloc(sizeof(char), 2);
+    sprintf(t, "%d", i);
+    write(to_client[i], t, 14);
+    free(t);
+  }
+
 }

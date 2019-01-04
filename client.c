@@ -13,5 +13,7 @@ int main() {
   int from_server;
 
   from_server = client_handshake(&to_server);
-  
+  char* response = calloc(sizeof(char), 200);
+  read(from_server, response, 200);
+  printf("i am dude #%s\n", response);
 }
