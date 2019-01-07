@@ -7,6 +7,7 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
+#include <time.h>
 
 #ifndef NETWORKING_H
 #define NETWORKING_H
@@ -14,6 +15,11 @@
 
 #define HANDSHAKE_BUFFER_SIZE 10
 #define BUFFER_SIZE 1000
+
+struct deck {
+  char** cards;
+  size_t size;
+};
 
 int server_handshake(int *to_client);
 

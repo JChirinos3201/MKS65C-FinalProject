@@ -9,38 +9,85 @@ Cards Against K
 #include "helpers.h"
 
 char ** parse_cards(char * raw_cards){
-  char ** args = calloc(500, sizeof(char*));
+  char ** cards = calloc(500, sizeof(char*));
 
   int index = 0;
 
   while (raw_cards != NULL && index < 500){
-    args[index] = strsep(&raw_cards, "\n");
+    cards[index] = strsep(&raw_cards, "\n");
     index++;
   }
-  return args;
+  return cards;
 }
 
 
-char** get_white_cards() {
+struct deck* get_white_deck() {
+  // make white card struct
+  struct deck* white = calloc(sizeof(struct deck), 1);
+
+  // reading and parsing white card csv
   int file = open("cards/white.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   read(file, raw_cards, 10000);
   char** cards = parse_cards(raw_cards);
 
+  // yeeting lots and lots of memory
   free(raw_cards);
-  return cards;
+
+  // setting struct values
+  white->cards = cards;
+  white->size = size(cards);
+
+  return white;
 }
 
-char** get_black_cards() {
+struct deck* get_black_deck() {
+  // make black card struct
+  struct deck* black = calloc(sizeof(struct deck), 1);
+
+  // reading and parsing white card csv
   int file = open("cards/black.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   read(file, raw_cards, 10000);
   char** cards = parse_cards(raw_cards);
 
+  // yeeting lots and lots of memory
   free(raw_cards);
-  return cards;
+
+  // setting struct values
+  black->cards = cards;
+  black->size = size(cards);
+
+  return black;
 }
 
-void shuffle(char ** cards) {
+size_t size(char** arr) {
+  size_t s = 0;
+  while (*arr) {
+    s++;
+    arr++;
+  }
+  return s;
+}
 
+void swap(struct deck* deck, int i, int j) {
+  char* temp = calloc(sizeof(char), 100);
+  strcpy(temp, deck->cards[i]);
+  deck->cards[i] = deck->cards[j];
+  deck->cards[j] = temp;
+}
+
+void shuffle(struct deck* deck) {
+  int i;
+  for (i = deck->size - 1; i > 0; i--) {
+    int j = rand() % (i + 1);
+    swap(deck, i, j);
+  }
+}
+
+void print_cards(char** cards) {
+  while (*cards) {
+    printf("%s\n", *cards);
+    cards++;
+  }
 }

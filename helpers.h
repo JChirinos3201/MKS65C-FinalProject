@@ -1,12 +1,18 @@
-#ifndef HELPERS
-#define HELPERS
+#ifndef HELPERS_H
+#define HELPERS_H
 
-char ** parse_cards(char * raw_cards);
+char ** parse_cards(char *);
 
-char** get_white_cards();
+struct deck* get_white_deck();
 
-char** get_black_cards();
+struct deck* get_black_deck();
 
-void shuffle(char ** cards);
+size_t size(char**);
+
+void swap(struct deck*, int, int);
+
+void shuffle(struct deck*);
+
+void print_cards(char**);
 
 #endif

@@ -23,15 +23,15 @@ int server_handshake(int *to_client) {
   char* response = calloc(sizeof(char), 10);
   int downstream = open("Sesame", O_RDONLY);
   read(downstream, response, 200);
-  printf("server got: |%s|\n", response);
+  // printf("server got: |%s|\n", response);
   remove("Sesame");
 
   int upstream = open(response, O_WRONLY);
   write(upstream, "Got it!", 8);
-  printf("server wrote to client\n");
+  // printf("server wrote to client\n");
 
   read(downstream, response, 200);
-  printf("server got: |%s|\n", response);
+  // printf("server got: |%s|\n", response);
 
   *to_client = upstream;
 
@@ -58,12 +58,12 @@ int client_handshake(int *to_server) {
 
   int upstream = open("Sesame", O_WRONLY);
   write(upstream, "ClientFIFO", 11);
-  printf("client wrote to server\n");
+  // printf("client wrote to server\n");
 
   char* response = calloc(sizeof(char), 200);
   int downstream = open("ClientFIFO", O_RDONLY);
   read(downstream, response, 9);
-  printf("client got: |%s|\n", response);
+  // printf("client got: |%s|\n", response);
   remove("ClientFIFO");
 
   write(upstream, "K, we're connected!", 20);

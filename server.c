@@ -26,13 +26,19 @@ int MAX_PLAYER_COUNT = 3;
 int SCORE_CAP = 10;
 
 int main() {
+  // seeding rand
+  srand(time(NULL));
 
   // set ctrl-c signal
   signal(SIGINT, sighandler);
 
-  // array of black and white cards
-  char ** black_cards = get_black_cards();
-  char ** white_cards = get_white_cards();
+  // decks of black and white cards
+  struct deck* black_deck = get_black_deck();
+  struct deck* white_deck = get_white_deck();
+
+  // shuffle decks
+  shuffle(black_deck);
+  shuffle(white_deck);
 
   // array of file descriptors for pipes to/from clients
   int* to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
