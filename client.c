@@ -7,6 +7,14 @@ Cards Against K
 
 #include "pipe_networking.h"
 
+static void sighandler(int signo) {
+  if (signo == SIGINT) {
+    remove("Sesame");
+    printf("\n");
+    exit(EXIT_SUCCESS);
+  }
+}
+
 int main() {
   // file descriptors for client-server communication
   int to_server;
@@ -15,5 +23,5 @@ int main() {
   from_server = client_handshake(&to_server);
   char* response = calloc(sizeof(char), 200);
   read(from_server, response, 200);
-  printf("i am dude #%s\n", response);
+  printf("You are player #%s\n", response);
 }

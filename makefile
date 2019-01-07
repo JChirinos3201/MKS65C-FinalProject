@@ -19,4 +19,4 @@ helpers.o: helpers.c helpers.h
 	gcc -c helpers.c
 
 clean:
-	-rm -f *.o *~ client server
+	-rm -f *.o *~ client server ClientFIFO Sesame

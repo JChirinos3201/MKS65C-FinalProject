@@ -52,7 +52,8 @@ int main() {
   }
   printf("all clients connected\n");
 
-  // broadcasting example
+  // broadcasting ID (index in fd list) to each client
+  // (broadcasting example)
   int i;
   for (i = 0; i < 3; i++) {
     char* t = calloc(sizeof(char), 2);
