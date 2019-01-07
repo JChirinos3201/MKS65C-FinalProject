@@ -14,7 +14,7 @@
   =========================*/
 int server_handshake(int *to_client) {
 
-  char * client_to_server = "Sesame";
+  char * client_to_server = "/tmp/Sesame";
 
   int mkfifo_status = mkfifo(client_to_server, 0644);
   if (mkfifo_status == -1) {
@@ -52,8 +52,8 @@ int server_handshake(int *to_client) {
   =========================*/
 int client_handshake(int *to_server) {
 
-  char * client_to_server = "Sesame";
-  char * server_to_client = "ClientFIFO";
+  char * client_to_server = "/tmp/Sesame";
+  char * server_to_client = "/tmp/ClientFIFO";
 
   int mkfifo_status = mkfifo(server_to_client, 0644);
   if (mkfifo_status == -1) {

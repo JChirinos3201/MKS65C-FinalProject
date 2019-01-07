@@ -7,14 +7,6 @@ Cards Against K
 
 #include "pipe_networking.h"
 
-static void sighandler(int signo) {
-  if (signo == SIGINT) {
-    remove("Sesame");
-    printf("\n");
-    exit(EXIT_SUCCESS);
-  }
-}
-
 int main() {
   // file descriptors for client-server communication
   int to_server;
