@@ -5,6 +5,10 @@ Team Jam In A Can
 Cards Against K
 */
 
+int to_server, from_server;
+char** white_cards;
+char* black_card;
+
 #include "pipe_networking.h"
 
 void setup() {
@@ -12,9 +16,12 @@ void setup() {
   int to_server;
   int from_server;
 
+  // black card memory allocation
+  black_card = calloc(sizeof(char), 200);
+
   from_server = client_handshake(&to_server);
 
-  char ** white_cards = calloc(sizeof(char*), 7);
+  white_cards = calloc(sizeof(char*), 7);
   for (int i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
     read(from_server, card, 200);
@@ -34,7 +41,22 @@ void setup() {
   printf("You are player #%s\n", response);
 
   free(response);
-  free(white_cards);
+}
+
+void get_black_card() {
+
+}
+
+void submit_white_card() {
+
+}
+
+int endgame_check() {
+
+}
+
+void get_white_card() {
+
 }
 
 int main() {

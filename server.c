@@ -85,7 +85,10 @@ void setup() {
 }
 
 void broadcast_black_card() {
-
+  int i;
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    char* out = black_deck->cards[black_deck->card_at]; 
+  }
 }
 
 void get_white_cards() {
@@ -105,6 +108,7 @@ void distribute_white_cards() {
     write(to_client[i], white_deck->cards[white_deck->card_at], 200);
     white_deck->card_at++;
   }
+  black_deck->card_at++;
 }
 
 void play() {
