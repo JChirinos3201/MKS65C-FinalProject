@@ -15,6 +15,7 @@ char ** parse_cards(char * raw_cards){
 
   while (raw_cards != NULL && index < 500){
     cards[index] = strsep(&raw_cards, "\n");
+    // printf("yoot:: %s\n", cards[index]);
     index++;
   }
   return cards;
@@ -36,6 +37,7 @@ struct deck* get_white_deck() {
 
   // setting struct values
   white->cards = cards;
+  print_cards(white->cards);
   white->size = size(cards);
   white->card_at = 0;
 
@@ -43,10 +45,10 @@ struct deck* get_white_deck() {
 }
 
 struct deck* get_black_deck() {
-  // make black card struct
+  // make white card struct
   struct deck* black = calloc(sizeof(struct deck), 1);
 
-  // reading and parsing white card csv
+  // reading and parsing black card csv
   int file = open("cards/black.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   read(file, raw_cards, 10000);
@@ -57,6 +59,7 @@ struct deck* get_black_deck() {
 
   // setting struct values
   black->cards = cards;
+  print_cards(black->cards);
   black->size = size(cards);
   black->card_at = 0;
 

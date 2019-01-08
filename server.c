@@ -83,13 +83,18 @@ void setup() {
     }
   }
 
+  print_cards(black_deck->cards);
+  printf("TEST BLACK: %s\n", black_deck->cards[3]);
+  printf("TEST WHITE: %s\n", white_deck->cards[3]);
+
+
 }
 
 void broadcast_black_card() {
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     write(to_client[i], black_deck->cards[black_deck->card_at], 200);
-    printf("writing black: %s",  black_deck->cards[black_deck->card_at]);
+    printf("writing black: %s\n",  black_deck->cards[black_deck->card_at]);
   }
 }
 
