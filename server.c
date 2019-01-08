@@ -88,7 +88,8 @@ void setup() {
 void broadcast_black_card() {
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    char* out = black_deck->cards[black_deck->card_at];
+    write(to_client[i], black_deck->cards[black_deck->card_at], 200);
+    printf("writing black: %s",  black_deck->cards[black_deck->card_at]);
   }
 }
 
@@ -114,18 +115,18 @@ void distribute_white_cards() {
 }
 
 void play() {
-  while (1) {
+  // while (1) {
     broadcast_black_card();
     get_white_cards();
     select_winner();
-    if (endgame_check()) {
-      break;
-    }
+    // if (endgame_check()) {
+    //   break;
+    // }
     distribute_white_cards();
-  }
+  // }
 }
 
 int main() {
   setup();
-  // play();
+  play();
 }
