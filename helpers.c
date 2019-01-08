@@ -35,13 +35,9 @@ struct deck* get_white_deck() {
   // yeeting lots and lots of memory
   free(raw_cards);
 
-  printf("cards b4: %s\n", "original");
-  print_cards(cards);
-  printf("\n\n\n\n\n");
   // setting struct values
   white->cards = cards;
-
-  print_cards(white->cards);
+  // print_cards(white->cards);
   white->size = size(cards);
   white->card_at = 0;
 
