@@ -25,7 +25,12 @@ static void sighandler(int signo) {
 int MAX_PLAYER_COUNT = 3;
 int SCORE_CAP = 10;
 
-int main() {
+// defining useful vars
+struct deck* black_deck, white_deck;
+int* to_client, from_client, scores;
+char** names;
+
+void setup() {
   // seeding rand
   srand(time(NULL));
 
@@ -33,16 +38,23 @@ int main() {
   signal(SIGINT, sighandler);
 
   // decks of black and white cards
-  struct deck* black_deck = get_black_deck();
-  struct deck* white_deck = get_white_deck();
+  black_deck = get_black_deck();
+  white_deck = get_white_deck();
 
   // shuffle decks
   // shuffle(black_deck);
   // shuffle(white_deck);
 
   // array of file descriptors for pipes to/from clients
-  int* to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
-  int* from_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  from_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
+
+  // array of player names
+  names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
+
+  // array of player scores
+  scores = calloc(sizeof(int), MAX_PLAYER_COUNT);
+
 
   // populate fd arrays
   int player_count = 0;
@@ -56,14 +68,10 @@ int main() {
   // (broadcasting example)
   int i;
 
-  printf("writing TEST: %s\n", white_deck->cards[2]);
-
   // sending 7 cards to each client
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     for (int c = 0; c < 7; c++) {
-      int at = white_deck->card_at;
-      printf("writing #%d: %s\n", at, white_deck->cards[at]);
-      write(to_client[i], white_deck->cards[at], 200);
+      write(to_client[i], white_deck->cards[white_deck->card_at], 200);
       white_deck->card_at++;
     }
   }
@@ -71,7 +79,47 @@ int main() {
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* t = calloc(sizeof(char), 2);
     sprintf(t, "%d", i);
-    write(to_client[i], t, 14);
+    write(to_client[i], t, 2);
     free(t);
   }
+}
+
+void broadcast_black_card() {
+
+}
+
+void get_white_cards() {
+
+}
+
+void select_winner() {
+
+}
+
+int endgame_check() {
+
+}
+
+void distribute_white_cards() {
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    write(to_client[i], white_deck->cards[white_deck->card_at], 200);
+    white_deck->card_at++;
+  }
+}
+
+void play() {
+  while (1) {
+    broadcast_black_card();
+    get_white_cards();
+    select_winner();
+    if (endgame_check()) {
+      break;
+    }
+    distribute_white_cards();
+  }
+}
+
+int main() {
+  setup();
+  play();
 }

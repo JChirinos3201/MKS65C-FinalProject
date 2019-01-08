@@ -16,8 +16,8 @@
 #define HANDSHAKE_BUFFER_SIZE 10
 #define BUFFER_SIZE 1000
 
-#define CLIENT_TO_SERVER "/tmp/Sesame"
-#define SERVER_TO_CLIENT "/tmp/ClientFIFO"
+#define CLIENT_TO_SERVER "Sesame"
+#define SERVER_TO_CLIENT "ClientFIFO"
 
 struct deck {
   char** cards;
