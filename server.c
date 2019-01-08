@@ -68,6 +68,13 @@ void setup() {
   // (broadcasting example)
   int i;
 
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    char* t = calloc(sizeof(char), 2);
+    sprintf(t, "%d", i);
+    write(to_client[i], t, 2);
+    free(t);
+  }
+
   // sending 7 cards to each client
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     for (int c = 0; c < 7; c++) {
@@ -76,12 +83,6 @@ void setup() {
     }
   }
 
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    char* t = calloc(sizeof(char), 2);
-    sprintf(t, "%d", i);
-    write(to_client[i], t, 2);
-    free(t);
-  }
 }
 
 void broadcast_black_card() {
@@ -126,5 +127,5 @@ void play() {
 
 int main() {
   setup();
-  //play();
+  // play();
 }

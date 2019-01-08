@@ -21,6 +21,10 @@ void setup() {
 
   from_server = client_handshake(&to_server);
 
+  char* response = calloc(sizeof(char), 2);
+  read(from_server, response, 2);
+  printf("You are player #%s\n", response);
+
   white_cards = calloc(sizeof(char*), 7);
   for (int i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
@@ -30,15 +34,9 @@ void setup() {
 
   // display player's white cards
   printf("White Cards:\n");
-  int i = 0;
-  while(white_cards[i]){
-    printf("%d: %s\n", i, white_cards[i]);
-    i++;
+  for (int i = 0; i < 7; i++){
+    printf("\t%d: %s\n", i, white_cards[i]);
   }
-
-  char* response = calloc(sizeof(char), 2);
-  read(from_server, response, 2);
-  printf("You are player #%s\n", response);
 
   free(response);
 }
