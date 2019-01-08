@@ -22,7 +22,7 @@ int server_handshake(int *to_client) {
     exit(1);
   }
 
-  char* response = calloc(sizeof(char), 10);
+  char* response = calloc(sizeof(char), 20);
   int downstream = open(client_to_server, O_RDONLY);
   read(downstream, response, 200);
   // printf("server got: |%s|\n", response);
@@ -62,7 +62,7 @@ int client_handshake(int *to_server) {
   }
 
   int upstream = open(client_to_server, O_WRONLY);
-  write(upstream, server_to_client, 11);
+  write(upstream, server_to_client, 20);
   // printf("client wrote to server\n");
 
   char* response = calloc(sizeof(char), 200);
