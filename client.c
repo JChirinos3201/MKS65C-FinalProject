@@ -17,17 +17,22 @@ int main() {
   read(from_server, response, 2);
   printf("You are player #%s\n", response);
 
+  write(to_server, "xD", 100);
+
   char ** white_cards = calloc(sizeof(char), 200);
   for (int i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
     read(from_server, card, 200);
+    printf("card = %s\n", card);
     white_cards[i] = card;
-    write(to_server, "cool beans", 100);
   }
 
+  // display player's white cards
   printf("White Cards:\n");
-  for (int i = 0; i < 7; i++){
+  int i = 0;
+  while(white_cards[i]){
     printf("%d: %s\n", i, white_cards[i]);
+    i++;
   }
 
   free(response);

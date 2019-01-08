@@ -62,17 +62,16 @@ int main() {
     free(t);
   }
 
+
+  printf("writing TEST: %s\n", white_deck->cards[2]);
+
   // sending 7 cards to each client
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     for (int c = 0; c < 7; c++) {
       int at = white_deck->card_at;
-      printf("writing: %s\n", white_deck->cards[at]);
+      printf("writing #%d: %s\n", at, white_deck->cards[at]);
       write(to_client[i], white_deck->cards[at], 200);
       white_deck->card_at++;
-      char* xD = calloc(10, 100);
-      read(from_client[i], xD, 100);
-      printf("read: %s\n", xD);
-      free(xD);
     }
   }
 }
