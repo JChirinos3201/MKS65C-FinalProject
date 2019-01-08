@@ -60,7 +60,7 @@ void submit_white_card() {
 }
 
 int endgame_check() {
-
+  return 0;
 }
 
 void get_white_card() {

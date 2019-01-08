@@ -107,7 +107,7 @@ void select_winner() {
 }
 
 int endgame_check() {
-
+  return 0;
 }
 
 void distribute_white_cards() {
