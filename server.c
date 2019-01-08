@@ -69,8 +69,12 @@ int main() {
       printf("writing %s\n", white_deck->cards[at]);
       write(to_client[i], white_deck->cards[at], 200);
       white_deck->card_at++;
+      char* xD = calloc(10, 100);
+      read(from_client[i], xD, 100);
+      free(xD);
     }
   }
+
 
 
 }

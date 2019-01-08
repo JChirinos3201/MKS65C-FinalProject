@@ -22,6 +22,7 @@ int main() {
     char* card = calloc(sizeof(char), 200);
     read(from_server, card, 200);
     white_cards[i] = card;
+    write(to_server, "cool beans", 100);
   }
 
   printf("White Cards:\n");
