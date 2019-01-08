@@ -26,8 +26,11 @@ int MAX_PLAYER_COUNT = 3;
 int SCORE_CAP = 10;
 
 // defining useful vars
-struct deck* black_deck, * white_deck;
-int* to_client, * from_client, * scores;
+struct deck* black_deck;
+struct deck* white_deck;
+int* to_client;
+int* from_client;
+int* scores;
 char** names;
 
 void setup() {
