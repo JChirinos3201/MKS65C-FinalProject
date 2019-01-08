@@ -52,7 +52,6 @@ int main() {
     player_count++;
   }
   printf("all clients connected\n");
-  print_cards(white_deck->cards);
 
   // broadcasting ID (index in fd list) to each client
   // (broadcasting example)
