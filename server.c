@@ -83,9 +83,9 @@ void setup() {
     }
   }
 
-  print_cards(black_deck->cards);
-  printf("TEST BLACK: %s\n", black_deck->cards[3]);
-  printf("TEST WHITE: %s\n", white_deck->cards[3]);
+  // print_cards(black_deck->cards);
+  // printf("TEST BLACK: %s\n", black_deck->cards[3]);
+  // printf("TEST WHITE: %s\n", white_deck->cards[3]);
 
 
 }

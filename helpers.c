@@ -37,7 +37,7 @@ struct deck* get_white_deck() {
 
   // setting struct values
   white->cards = cards;
-  print_cards(white->cards);
+  // print_cards(white->cards);
   white->size = size(cards);
   white->card_at = 0;
 
@@ -58,6 +58,9 @@ struct deck* get_black_deck() {
   free(raw_cards);
 
   // setting struct values
+  printf("cards b4\n");
+  print_cards(cards);
+  printf("\n\n\n\n\n");
   black->cards = cards;
   print_cards(black->cards);
   black->size = size(cards);
