@@ -21,7 +21,6 @@ int main() {
   for (int i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
     read(from_server, card, 200);
-    printf("card = %s\n", card);
     white_cards[i] = card;
   }
 
