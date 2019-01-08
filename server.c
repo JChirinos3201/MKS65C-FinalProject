@@ -71,10 +71,8 @@ int main() {
       white_deck->card_at++;
       char* xD = calloc(10, 100);
       read(from_client[i], xD, 100);
+      printf("read: %s\n", xD);
       free(xD);
     }
   }
-
-
-
 }
