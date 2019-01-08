@@ -16,7 +16,7 @@ No settings; predefined values
 
 static void sighandler(int signo) {
   if (signo == SIGINT) {
-    remove("Sesame");
+    remove(CLIENT_TO_SERVER);
     printf("\n");
     exit(EXIT_SUCCESS);
   }

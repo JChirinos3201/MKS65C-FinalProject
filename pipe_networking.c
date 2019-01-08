@@ -14,19 +14,17 @@
   =========================*/
 int server_handshake(int *to_client) {
 
-  char * client_to_server = "Sesame";
-
-  int mkfifo_status = mkfifo(client_to_server, 0644);
+  int mkfifo_status = mkfifo(CLIENT_TO_SERVER, 0644);
   if (mkfifo_status == -1) {
     printf("MKFIFO SERVER BROKED: %s\n", strerror(errno));
     exit(1);
   }
 
   char* response = calloc(sizeof(char), 20);
-  int downstream = open(client_to_server, O_RDONLY);
+  int downstream = open(CLIENT_TO_SERVER, O_RDONLY);
   read(downstream, response, 200);
   // printf("server got: |%s|\n", response);
-  remove(client_to_server);
+  remove(CLIENT_TO_SERVER);
 
   int upstream = open(response, O_WRONLY);
   write(upstream, "Got it!", 8);
@@ -52,24 +50,21 @@ int server_handshake(int *to_client) {
   =========================*/
 int client_handshake(int *to_server) {
 
-  char * client_to_server = "Sesame";
-  char * server_to_client = "ClientFIFO";
-
-  int mkfifo_status = mkfifo(server_to_client, 0644);
+  int mkfifo_status = mkfifo(SERVER_TO_CLIENT, 0644);
   if (mkfifo_status == -1) {
     printf("MKFIFO CLIENT BROKED: %s\n", strerror(errno));
     exit(1);
   }
 
-  int upstream = open(client_to_server, O_WRONLY);
-  write(upstream, server_to_client, 20);
+  int upstream = open(CLIENT_TO_SERVER, O_WRONLY);
+  write(upstream, SERVER_TO_CLIENT, 20);
   // printf("client wrote to server\n");
 
   char* response = calloc(sizeof(char), 200);
-  int downstream = open(server_to_client, O_RDONLY);
+  int downstream = open(SERVER_TO_CLIENT, O_RDONLY);
   read(downstream, response, 9);
   // printf("client got: |%s|\n", response);
-  remove(server_to_client);
+  remove(SERVER_TO_CLIENT);
 
   write(upstream, "K, we're connected!", 20);
 
