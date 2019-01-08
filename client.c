@@ -65,7 +65,7 @@ int main() {
     get_black_card();
     submit_white_card();
     if (endgame_check()) {
-      break
+      break;
     }
     get_white_card();
   }

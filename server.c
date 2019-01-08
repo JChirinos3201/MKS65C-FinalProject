@@ -26,8 +26,8 @@ int MAX_PLAYER_COUNT = 3;
 int SCORE_CAP = 10;
 
 // defining useful vars
-struct deck* black_deck, white_deck;
-int* to_client, from_client, scores;
+struct deck* black_deck, * white_deck;
+int* to_client, * from_client, * scores;
 char** names;
 
 void setup() {
@@ -87,7 +87,7 @@ void setup() {
 void broadcast_black_card() {
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    char* out = black_deck->cards[black_deck->card_at]; 
+    char* out = black_deck->cards[black_deck->card_at];
   }
 }
 
@@ -104,6 +104,7 @@ int endgame_check() {
 }
 
 void distribute_white_cards() {
+  int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     write(to_client[i], white_deck->cards[white_deck->card_at], 200);
     white_deck->card_at++;
@@ -125,5 +126,5 @@ void play() {
 
 int main() {
   setup();
-  play();
+  //play();
 }
