@@ -16,7 +16,7 @@ No settings; predefined values
 
 static void sighandler(int signo) {
   if (signo == SIGINT) {
-    remove("/tmp/Sesame");
+    remove("Sesame");
     printf("\n");
     exit(EXIT_SUCCESS);
   }
@@ -24,6 +24,7 @@ static void sighandler(int signo) {
 
 int MAX_PLAYER_COUNT = 3;
 int SCORE_CAP = 10;
+int CARD_AT = 0;
 
 int main() {
   // seeding rand
@@ -56,14 +57,18 @@ int main() {
   // broadcasting ID (index in fd list) to each client
   // (broadcasting example)
   int i;
-  for (i = 0; i < 3; i++) {
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* t = calloc(sizeof(char), 2);
     sprintf(t, "%d", i);
     write(to_client[i], t, 14);
     free(t);
+  }
 
-    for (int num_cards = i * 7; num_cards < (i*7) + 7; num_cards++){
-      write(to_client[i], white_deck->cards[i], 50);
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    for (int c = 0; c < 7; c++) {
+      printf("writing %s\n", white_deck->cards[CARD_AT]);
+      write(to_client[i], white_deck->cards[CARD_AT], 50);
+      CARD_AT++;
     }
   }
 
