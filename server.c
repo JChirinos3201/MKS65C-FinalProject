@@ -55,13 +55,6 @@ int main() {
   // broadcasting ID (index in fd list) to each client
   // (broadcasting example)
   int i;
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    char* t = calloc(sizeof(char), 2);
-    sprintf(t, "%d", i);
-    write(to_client[i], t, 14);
-    free(t);
-  }
-
 
   printf("writing TEST: %s\n", white_deck->cards[2]);
 
@@ -73,5 +66,12 @@ int main() {
       write(to_client[i], white_deck->cards[at], 200);
       white_deck->card_at++;
     }
+  }
+
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    char* t = calloc(sizeof(char), 2);
+    sprintf(t, "%d", i);
+    write(to_client[i], t, 14);
+    free(t);
   }
 }
