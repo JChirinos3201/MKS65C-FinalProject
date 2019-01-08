@@ -18,13 +18,15 @@ int main() {
   printf("You are player #%s\n", response);
 
   char ** white_cards = calloc(sizeof(char), 200);
-  for (int card = 0; card < 7; card++){
-    read(from_server, white_cards[card], 50);
+  for (int i = 0; i < 7; i++){
+    char* card = calloc(sizeof(char), 200);
+    read(from_server, card, 50);
+    white_cards[i] = card;
   }
 
   printf("White Cards:\n");
-  for (int card = 0; card < 7; card++){
-    printf("%d: %s\n", card, white_cards[card]);
+  for (int i = 0; i < 7; i++){
+    printf("%d: %s\n", i, white_cards[i]);
   }
 
   free(response);
