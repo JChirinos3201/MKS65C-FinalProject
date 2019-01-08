@@ -17,8 +17,6 @@ int main() {
   read(from_server, response, 2);
   printf("You are player #%s\n", response);
 
-  write(to_server, "xD", 100);
-
   char ** white_cards = calloc(sizeof(char), 200);
   for (int i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
