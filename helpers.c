@@ -26,7 +26,7 @@ struct deck* get_white_deck() {
   struct deck* white = calloc(sizeof(struct deck), 1);
 
   // reading and parsing white card csv
-  int file = open("cards/test.csv", O_RDONLY);
+  int file = open("cards/white.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   printf("%s", raw_cards);
   read(file, raw_cards, 10000);
@@ -39,6 +39,7 @@ struct deck* get_white_deck() {
   // setting struct values
   white->cards = cards;
   white->size = size(cards);
+  white->card_at = 0;
 
   return white;
 }
@@ -59,6 +60,7 @@ struct deck* get_black_deck() {
   // setting struct values
   black->cards = cards;
   black->size = size(cards);
+  black->card_at = 0;
 
   return black;
 }

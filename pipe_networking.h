@@ -19,6 +19,7 @@
 struct deck {
   char** cards;
   size_t size;
+  int card_at;
 };
 
 int server_handshake(int *to_client);

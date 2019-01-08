@@ -24,7 +24,6 @@ static void sighandler(int signo) {
 
 int MAX_PLAYER_COUNT = 3;
 int SCORE_CAP = 10;
-int CARD_AT = 0;
 
 int main() {
   // seeding rand
@@ -38,8 +37,8 @@ int main() {
   struct deck* white_deck = get_white_deck();
 
   // shuffle decks
-  shuffle(black_deck);
-  shuffle(white_deck);
+  // shuffle(black_deck);
+  // shuffle(white_deck);
 
   // array of file descriptors for pipes to/from clients
   int* to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
@@ -63,11 +62,13 @@ int main() {
     free(t);
   }
 
+  // sending 7 cards to each client
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     for (int c = 0; c < 7; c++) {
-      printf("writing %s\n", white_deck->cards[CARD_AT]);
-      write(to_client[i], white_deck->cards[CARD_AT], 50);
-      CARD_AT++;
+      int at = white_deck->card_at;
+      printf("writing %s\n", white_deck->cards[at]);
+      write(to_client[i], white_deck->cards[at], 50);
+      white_deck->card_at++;
     }
   }
 
