@@ -20,7 +20,7 @@ int main() {
   char ** white_cards = calloc(sizeof(char), 200);
   for (int i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
-    read(from_server, card, 50);
+    read(from_server, card, 200);
     white_cards[i] = card;
   }
 

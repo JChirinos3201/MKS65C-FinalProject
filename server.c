@@ -67,7 +67,7 @@ int main() {
     for (int c = 0; c < 7; c++) {
       int at = white_deck->card_at;
       printf("writing %s\n", white_deck->cards[at]);
-      write(to_client[i], white_deck->cards[at], 50);
+      write(to_client[i], white_deck->cards[at], 200);
       white_deck->card_at++;
     }
   }
