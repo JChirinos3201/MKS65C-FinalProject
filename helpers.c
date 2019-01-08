@@ -58,7 +58,7 @@ struct deck* get_black_deck() {
   free(raw_cards);
 
   // setting struct values
-  printf("cards b4\n");
+  printf("cards b4: %s\n", "original");
   print_cards(cards);
   printf("\n\n\n\n\n");
   black->cards = cards;
