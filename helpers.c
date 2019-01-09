@@ -32,6 +32,9 @@ struct deck* get_white_deck() {
   read(file, raw_cards, 10000);
   printf("RAW WHITE DECK\n%s\nEND\n", raw_cards);
   char** white_cards = parse_cards(raw_cards);
+  printf("\n\nSTARTIG CHAR** WHITE\n");
+  print_cards(white_cards);
+  printf("END\n\n\n");
 
   // yeeting lots and lots of memory
   free(raw_cards);
@@ -55,6 +58,9 @@ struct deck* get_black_deck() {
   read(file, raw_cards, 10000);
   printf("RAW BLACK DECK\n%s\nEND\n", raw_cards);
   char** black_cards = parse_cards(raw_cards);
+  printf("\n\nSTARTIG CHAR** BLACK\n");
+  print_cards(black_cards);
+  printf("END\n\n\n");
 
   // yeeting lots and lots of memory
   free(raw_cards);
