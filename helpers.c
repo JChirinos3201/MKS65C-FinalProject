@@ -66,10 +66,12 @@ struct deck* get_black_deck() {
   free(raw_cards);
 
   // setting struct values
-  printf("cards b4: %s\n", "original");
+  printf("BLACK CARDS BEFORE ASSIGNING TO DECK:\n");
   print_cards(black_cards);
   printf("\n\n\n\n\n");
   black->cards = black_cards;
+
+  printf("\n\nBLACK CARDS AFTER ASSIGNING TO DECK:\n");
   print_cards(black->cards);
   black->size = size(black_cards);
   black->card_at = 0;
