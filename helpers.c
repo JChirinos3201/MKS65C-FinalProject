@@ -15,7 +15,6 @@ char ** parse_cards(char * raw_cards){
 
   while (raw_cards != NULL && index < 500){
     cards[index] = strsep(&raw_cards, "\n");
-    // printf("yoot:: %s\n", cards[index]);
     index++;
   }
   return cards;
@@ -30,18 +29,12 @@ struct deck* get_white_deck() {
   int file = open("cards/white.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   read(file, raw_cards, 10000);
-  printf("RAW WHITE DECK\n%s\nEND\n", raw_cards);
+
+  // splitting at \n
   char** white_cards = parse_cards(raw_cards);
-  printf("\n\nSTARTIG CHAR** WHITE\n");
-  print_cards(white_cards);
-  printf("END\n\n\n");
 
-  // yeeting lots and lots of memory
-  //free(raw_cards);
-
-  // setting struct values
+  // setting deck vals
   white->cards = white_cards;
-  // print_cards(white->cards);
   white->size = size(white_cards);
   white->card_at = 0;
 
@@ -56,23 +49,12 @@ struct deck* get_black_deck() {
   int file = open("cards/black.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   read(file, raw_cards, 10000);
-  printf("RAW BLACK DECK\n%s\nEND\n", raw_cards);
   char** black_cards = parse_cards(raw_cards);
-  printf("\n\nSTARTIG CHAR** BLACK\n");
-  print_cards(black_cards);
-  printf("END\n\n\n");
 
-  // yeeting lots and lots of memory
-  // free(raw_cards);
-
-  // setting struct values
-  printf("BLACK CARDS BEFORE ASSIGNING TO DECK:\n");
-  print_cards(black_cards);
-  printf("\n\n\n\n\n");
+  // splitting at \n
   black->cards = black_cards;
 
-  printf("\n\nBLACK CARDS AFTER ASSIGNING TO DECK:\n");
-  print_cards(black->cards);
+  // setting deck vals
   black->size = size(black_cards);
   black->card_at = 0;
 
