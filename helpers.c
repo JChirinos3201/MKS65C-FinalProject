@@ -30,6 +30,7 @@ struct deck* get_white_deck() {
   int file = open("cards/white.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   read(file, raw_cards, 10000);
+  printf("RAW WHITE DECK\n%s\n", raw_cards);
   char** white_cards = parse_cards(raw_cards);
 
   // yeeting lots and lots of memory
@@ -52,6 +53,7 @@ struct deck* get_black_deck() {
   int file = open("cards/black.csv", O_RDONLY);
   char * raw_cards = calloc(sizeof(char), 10000);
   read(file, raw_cards, 10000);
+  printf("RAW BLACK DECK\n%s\n", raw_cards);
   char** black_cards = parse_cards(raw_cards);
 
   // yeeting lots and lots of memory
