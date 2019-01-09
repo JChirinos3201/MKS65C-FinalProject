@@ -41,8 +41,8 @@ void setup() {
   signal(SIGINT, sighandler);
 
   // decks of black and white cards
-  white_deck = get_white_deck();
   black_deck = get_black_deck();
+  white_deck = get_white_deck();
 
 
   // shuffle decks
