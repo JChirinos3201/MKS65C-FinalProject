@@ -98,7 +98,6 @@ void broadcast_black_card() {
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     write(to_client[i], black_deck->cards[black_deck->card_at], 200);
-    printf("writing black: %s\n",  black_deck->cards[black_deck->card_at]);
   }
 }
 

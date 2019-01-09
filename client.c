@@ -23,10 +23,6 @@ void display_white_cards(){
 }
 
 void setup() {
-  // file descriptors for client-server communication
-  int to_server;
-  int from_server;
-
   // black card memory allocation
   black_card = calloc(sizeof(char), 200);
 
@@ -49,10 +45,10 @@ void setup() {
 }
 
 void get_black_card() {
-  printf("Black Card:\n");
+  // printf("Black Card:\n");
   char* black_card = calloc(sizeof(char), 200);
   read(from_server, black_card, 200);
-  printf("\t%s\n", black_card);
+  printf("Black Card:\n\t%s\n", black_card);
 }
 
 void submit_white_card() {
@@ -64,9 +60,9 @@ int endgame_check() {
 }
 
 void get_white_card() {
-  char* card = calloc(sizeof(char), 200);
-  read(from_server, card, 200);
-  white_cards[*card_selection] = card;
+  char* new_card = calloc(sizeof(char), 200);
+  read(from_server, new_card, 200);
+  white_cards[*card_selection] = new_card;
 }
 
 int main() {
