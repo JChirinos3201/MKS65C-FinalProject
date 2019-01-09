@@ -37,7 +37,7 @@ struct deck* get_white_deck() {
   printf("END\n\n\n");
 
   // yeeting lots and lots of memory
-  free(raw_cards);
+  //free(raw_cards);
 
   // setting struct values
   white->cards = white_cards;
@@ -63,7 +63,7 @@ struct deck* get_black_deck() {
   printf("END\n\n\n");
 
   // yeeting lots and lots of memory
-  free(raw_cards);
+  // free(raw_cards);
 
   // setting struct values
   printf("BLACK CARDS BEFORE ASSIGNING TO DECK:\n");
