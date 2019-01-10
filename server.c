@@ -88,13 +88,6 @@ void setup() {
     free(t);
   }
 
-  // sends clients MAX_PLAYER_COUNT
-  char* m = calloc(sizeof(char), 2);
-  sprintf(m, "%d", MAX_PLAYER_COUNT);
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    write(to_client[i], m, 2);
-  }
-
   // sending 7 cards to each client
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     for (int c = 0; c < 7; c++) {
@@ -203,8 +196,8 @@ void distribute_white_cards() {
 }
 
 void play() {
-  for(int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
-  // while (1) {
+  // for(int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
+  while (1) {
     // for non-czars
     broadcast_czar();
     broadcast_black_card();

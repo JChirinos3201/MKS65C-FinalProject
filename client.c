@@ -40,7 +40,6 @@ void setup() {
   read(from_server, response, 2);
   printf("You are player #%s\n", response);
   player_num = atoi(response);
-  printf("%d\n", player_num);
 
   // sets MAX_PLAYER_COUNT
   char* mpc_string = calloc(sizeof(char), 2);
@@ -60,6 +59,8 @@ void setup() {
 
   free(response);
 }
+
+void display_status(){}
 
 /********************
   CZAR FUNCTIONS
@@ -170,15 +171,16 @@ void get_white_card() {
 
 int main() {
   setup();
-  for (int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
-  // while (1) {
+  // for (int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
+  while (1) {
     get_czar();
+    display_status();
+    get_black_card();
     if (player_num == czar) {
       get_player_submissions();
       select_winner();
     }
     else {
-      get_black_card();
       display_white_cards();
       submit_white_card();
       get_white_card();
