@@ -20,7 +20,6 @@ int czar;
 void display_black_card() {
   printf("--------------------\n");
   printf("Black Card:\n\t%s\n", black_card);
-
 }
 
 void display_white_cards() {
@@ -85,6 +84,7 @@ void get_player_submissions() {
     char* t = calloc(sizeof(char), 200);
     read(from_server, t, 200);
     submissions[i] = t;
+    printf("player #%d submitted |%s|\n", i, submissions[i]);
   }
 }
 
@@ -92,38 +92,20 @@ void select_winner() {
   int i;
   int winner;
   // loop until winner is selected
-  while (1) {
-    // display player submissions
-    printf("Black card:\n\t%s\n", black_card);
-    printf("PLAYER SUBMISSIONS\n");
-    for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-      if (i != player_num) {
-        printf("\t%d. %s\n", i, submissions[i]);
-      }
-    }
-
-    // select winner
-    printf("Winner: ");
-    // size 200 to account for player stupidity?
-    char* winner_string = calloc(sizeof(char), 200);
-    fgets(winner_string, 200, stdin);
-    errno = 0;
-    char* end = NULL;
-    long temp = strtol(winner_string, &end, 10);
-    int winner = -1;
-    if (errno != EINVAL && errno != ERANGE && temp >= INT_MIN && temp <= INT_MAX) {
-      winner = (int) temp;
-    }
-
-    // breaks if winner is valid
-    if (winner >= 0 && winner < MAX_PLAYER_COUNT) {
-      break;
+  // display player submissions
+  printf("PLAYER SUBMISSIONS\n");
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    if (i != player_num) {
+      printf("\t%d. %s\n", i, submissions[i]);
     }
   }
 
-  // send winner index to server
+  // select winner
+  printf("Winner: ");
   char* winner_string = calloc(sizeof(char), 2);
-  sprintf(winner_string, "%d", winner);
+  fgets(winner_string, 2, stdin);
+
+  // send winner index to server
   write(to_server, winner_string, 2);
 
 }
@@ -133,7 +115,6 @@ void select_winner() {
 ********************/
 
 void get_black_card() {
-  char* black_card = calloc(sizeof(char), 200);
   read(from_server, black_card, 200);
 }
 
@@ -147,6 +128,7 @@ void submit_white_card() {
   char * line = calloc(sizeof(char), 2);
   get_line(line);
   card_choice = atoi(line);
+  printf("sending card #%d: %s\n", card_choice, white_cards[card_choice]);
   write(to_server, white_cards[card_choice], 200);
 }
 
@@ -166,9 +148,7 @@ void endgame_check() {
 }
 
 void get_white_card() {
-  char* new_card = calloc(sizeof(char), 200);
-  read(from_server, new_card, 200);
-  white_cards[3] = new_card;
+  read(from_server, white_cards[card_choice], 200);
 }
 
 int main() {
@@ -179,6 +159,7 @@ int main() {
     get_black_card();
     display_black_card();
     if (player_num == czar) {
+      display_white_cards();
       get_player_submissions();
       select_winner();
     }

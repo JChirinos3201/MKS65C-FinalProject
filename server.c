@@ -139,11 +139,6 @@ void get_white_cards() {
       cards_selected[i] = card;
     }
   }
-
-  // writes cards to the card czar
-  for (i = 0; i < MAX_PLAYER_COUNT - 1; i++){
-    write(to_client[czar], cards_selected[i], 200);
-  }
 }
 
 void send_player_submissions() {
