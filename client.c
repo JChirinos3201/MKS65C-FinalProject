@@ -17,7 +17,13 @@ int czar;
 
 #include "pipe_networking.h"
 
-void display_white_cards(){
+void display_black_card() {
+  printf("--------------------\n");
+  printf("Black Card:\n\t%s\n", black_card);
+
+}
+
+void display_white_cards() {
   // display player's white cards
   printf("\nWhite Cards:\n");
   for (int i = 0; i < 7; i++){
@@ -59,8 +65,6 @@ void setup() {
 
   free(response);
 }
-
-void display_status(){}
 
 /********************
   CZAR FUNCTIONS
@@ -129,13 +133,11 @@ void select_winner() {
 ********************/
 
 void get_black_card() {
-  printf("--------------------\n");
   char* black_card = calloc(sizeof(char), 200);
   read(from_server, black_card, 200);
-  printf("Black Card:\n\t%s\n", black_card);
 }
 
-void get_line(char * line){
+void get_line(char * line) {
   fgets(line, 2, stdin);
   char * p = strchr(line, '\n');
   if (p) *p = 0;
@@ -174,8 +176,8 @@ int main() {
   // for (int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
   while (1) {
     get_czar();
-    display_status();
     get_black_card();
+    display_black_card();
     if (player_num == czar) {
       get_player_submissions();
       select_winner();

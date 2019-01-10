@@ -88,6 +88,13 @@ void setup() {
     free(t);
   }
 
+  // sends clients MAX_PLAYER_COUNT
+  char* m = calloc(sizeof(char), 2);
+  sprintf(m, "%d", MAX_PLAYER_COUNT);
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    write(to_client[i], m, 2);
+  }
+
   // sending 7 cards to each client
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     for (int c = 0; c < 7; c++) {
