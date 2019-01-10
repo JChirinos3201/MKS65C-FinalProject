@@ -8,18 +8,20 @@ Cards Against K
 #include "pipe_networking.h"
 #include "helpers.h"
 
-char ** parse_cards(char * raw_cards){
-  char ** cards = calloc(500, sizeof(char*));
-
+char** parse_cards(char* raw_cards) {
+  char** cards = calloc(sizeof(char*), 500);
   int index = 0;
-
-  while (raw_cards != NULL && index < 500){
-    cards[index] = strsep(&raw_cards, "\n");
-    index++;
+  char* token;
+  while (raw_cards != NULL && index < 500) {
+    token = strsep(&raw_cards, "\n");
+    // ignores extra \n
+    if (strcmp(token, "")) {
+      cards[index] = token;
+      index++;
+    }
   }
   return cards;
 }
-
 
 struct deck* get_white_deck() {
   // make white card struct
