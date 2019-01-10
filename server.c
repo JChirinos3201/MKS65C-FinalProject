@@ -46,8 +46,8 @@ void setup() {
 
 
   // shuffle decks
-  // shuffle(black_deck);
-  // shuffle(white_deck);
+  shuffle(black_deck);
+  shuffle(white_deck);
 
   // array of file descriptors for pipes to/from clients
   to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
@@ -114,6 +114,7 @@ int endgame_check() {
 }
 
 void distribute_white_cards() {
+  printf("distributing white cards...\n");
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     write(to_client[i], white_deck->cards[white_deck->card_at], 200);

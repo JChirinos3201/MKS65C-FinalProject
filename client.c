@@ -11,7 +11,7 @@ char* black_card;
 
 #include "pipe_networking.h"
 
-int * card_selection; // rename later if you want dumbo
+int * card_choice; // rename later if you want dumbo
 
 void display_white_cards(){
   // display player's white cards
@@ -45,7 +45,7 @@ void setup() {
 }
 
 void get_black_card() {
-  // printf("Black Card:\n");
+  printf("--------------------\n");
   char* black_card = calloc(sizeof(char), 200);
   read(from_server, black_card, 200);
   printf("Black Card:\n\t%s\n", black_card);
@@ -62,7 +62,7 @@ int endgame_check() {
 void get_white_card() {
   char* new_card = calloc(sizeof(char), 200);
   read(from_server, new_card, 200);
-  white_cards[*card_selection] = new_card;
+  white_cards[3] = new_card;
 }
 
 int main() {
