@@ -11,7 +11,7 @@ int to_server, from_server;
 char** white_cards;
 char** submissions;
 char* black_card;
-int * card_choice; // rename later if you want dumbo
+int card_choice; // rename later if you want dumbo
 int player_num;
 int czar;
 
@@ -84,6 +84,8 @@ void get_player_submissions() {
 }
 
 void select_winner() {
+  int i;
+  int winner;
   // loop until winner is selected
   while (1) {
     // display player submissions
@@ -105,7 +107,7 @@ void select_winner() {
     long temp = strtol(winner_string, &end, 10);
     int winner = -1;
     if (errno != EINVAL && errno != ERANGE && temp >= INT_MIN && temp <= INT_MAX) {
-      int winner = (int) temp;
+      winner = (int) temp;
     }
 
     // breaks if winner is valid
@@ -117,7 +119,7 @@ void select_winner() {
   // send winner index to server
   char* winner_string = calloc(sizeof(char), 2);
   sprintf(winner_string, "%d", winner);
-  write(to_server, winner, 2);
+  write(to_server, winner_string, 2);
 
 }
 
@@ -139,16 +141,10 @@ void get_line(char * line){
 }
 
 void submit_white_card() {
-  if(player_num != czar){
-    char * line = calloc(sizeof(char), 2);
-    get_line(line);
-    card_choice = atoi(line);
-    write(to_server, white_cards[card_choice], 200);
-  }
-  else {
-    // read cards from server
-    //
-  }
+  char * line = calloc(sizeof(char), 2);
+  get_line(line);
+  card_choice = atoi(line);
+  write(to_server, white_cards[card_choice], 200);
 }
 
 void endgame_check() {
@@ -179,7 +175,7 @@ int main() {
     get_czar();
     if (player_num == czar) {
       get_player_submissions();
-      select_winning_player();
+      select_winner();
     }
     else {
       get_black_card();

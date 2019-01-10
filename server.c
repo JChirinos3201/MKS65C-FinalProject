@@ -128,7 +128,7 @@ void broadcast_black_card() {
 
 void get_white_cards() {
   // clears memory of selected cards
-  memset(cards_selected, 0, MAX_PLAYER_COUNT)
+  memset(cards_selected, 0, MAX_PLAYER_COUNT);
 
   // gets cards from players. czar index is left at 0
   int i;
@@ -147,6 +147,7 @@ void get_white_cards() {
 }
 
 void send_player_submissions() {
+  int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++){
     write(to_client[czar], cards_selected[i], 200);
   }
@@ -155,8 +156,8 @@ void send_player_submissions() {
 void get_round_winner() {
   // get winner
   char* round_winner_string = calloc(sizeof(char), 2);
-  read(from_client[czar], round_winner, 2);
-  int round_winner = atoi(round_winner);
+  read(from_client[czar], round_winner_string, 2);
+  int round_winner = atoi(round_winner_string);
 
   // increase score
   scores[round_winner]++;
