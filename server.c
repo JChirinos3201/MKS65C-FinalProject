@@ -30,6 +30,8 @@ struct deck* black_deck;
 struct deck* white_deck;
 int* to_client;
 int* from_client;
+int turn_counter;
+int czar;
 int* scores;
 char** names;
 
@@ -44,6 +46,8 @@ void setup() {
   black_deck = get_black_deck();
   white_deck = get_white_deck();
 
+  // initializes turn_counter
+  turn_counter = 0;
 
   // shuffle decks
   shuffle(black_deck);
@@ -59,7 +63,7 @@ void setup() {
   // array of player scores
   scores = calloc(sizeof(int), MAX_PLAYER_COUNT);
 
-
+  printf("waiting for clients to connect...\n");
   // populate fd arrays
   int player_count = 0;
   while (player_count < MAX_PLAYER_COUNT) {
@@ -72,6 +76,7 @@ void setup() {
   // (broadcasting example)
   int i;
 
+  // sends client's player #
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* t = calloc(sizeof(char), 2);
     sprintf(t, "%d", i);
@@ -91,18 +96,42 @@ void setup() {
   // printf("TEST BLACK: %s\n", black_deck->cards[3]);
   // printf("TEST WHITE: %s\n", white_deck->cards[3]);
 
+}
 
+void broadcast_czar() {
+  czar = turn_counter % MAX_PLAYER_COUNT;
+  for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
+    char* czar_num = calloc(sizeof(char), 2);
+    sprintf(czar_num, "%d", czar);
+    write(to_client[i], czar_num, 2);
+    free(czar_num);
+  }
 }
 
 void broadcast_black_card() {
-  int i;
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+  for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
     write(to_client[i], black_deck->cards[black_deck->card_at], 200);
   }
 }
 
 void get_white_cards() {
+  // reads the cards selected by players who are NOT the czar
+  char ** cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT - 1);
+  int i;
+  int n = 0;
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    if (i != czar) {
+      char* card = calloc(sizeof(char), 200);
+      read(from_client[i], card, 200);
+      cards_selected[n] = card;
+      n++;
+    }
+  }
 
+  // writes cards to the card czar
+  for (i = 0; i < MAX_PLAYER_COUNT - 1; i++){
+    write(to_client[czar], cards_selected[i], 200);
+  }
 }
 
 void select_winner() {
@@ -121,10 +150,13 @@ void distribute_white_cards() {
     white_deck->card_at++;
   }
   black_deck->card_at++;
+  turn_counter++;
 }
 
 void play() {
+  for(int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
   // while (1) {
+    broadcast_czar();
     broadcast_black_card();
     get_white_cards();
     select_winner();
@@ -132,7 +164,7 @@ void play() {
     //   break;
     // }
     distribute_white_cards();
-  // }
+  }
 }
 
 int main() {

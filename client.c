@@ -8,10 +8,11 @@ Cards Against K
 int to_server, from_server;
 char** white_cards;
 char* black_card;
+int player_num;
+int czar;
+int * card_choice; // rename later if you want dumbo
 
 #include "pipe_networking.h"
-
-int * card_choice; // rename later if you want dumbo
 
 void display_white_cards(){
   // display player's white cards
@@ -28,9 +29,12 @@ void setup() {
 
   from_server = client_handshake(&to_server);
 
+  // sets player number
   char* response = calloc(sizeof(char), 2);
   read(from_server, response, 2);
   printf("You are player #%s\n", response);
+  player_num = atoi(response);
+  printf("%d\n", player_num);
 
   white_cards = calloc(sizeof(char*), 7);
   for (int i = 0; i < 7; i++){
@@ -39,9 +43,15 @@ void setup() {
     white_cards[i] = card;
   }
 
-  display_white_cards();
+  // display_white_cards();
 
   free(response);
+}
+
+void get_czar(){
+  char* response = calloc(sizeof(char), 2);
+  read(from_server, response, 2);
+  czar = atoi(response);
 }
 
 void get_black_card() {
@@ -51,8 +61,23 @@ void get_black_card() {
   printf("Black Card:\n\t%s\n", black_card);
 }
 
-void submit_white_card() {
+void get_line(char * line){
+  fgets(line, 2, stdin);
+  char * p = strchr(line, '\n');
+  if (p) *p = 0;
+}
 
+void submit_white_card() {
+  if(player_num != czar){
+    char * line = calloc(sizeof(char), 2);
+    get_line(line);
+    card_choice = atoi(line);
+    write(to_server, white_cards[card_choice], 200);
+  }
+  else {
+    // read cards from server
+    //
+  }
 }
 
 int endgame_check() {
@@ -67,7 +92,9 @@ void get_white_card() {
 
 int main() {
   setup();
+  for (int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
   // while (1) {
+    get_czar();
     get_black_card();
     display_white_cards();
     submit_white_card();
@@ -75,5 +102,5 @@ int main() {
     //   break;
     // }
     get_white_card();
-  // }
+  }
 }
