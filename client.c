@@ -5,12 +5,15 @@ Team Jam In A Can
 Cards Against K
 */
 
+int MAX_PLAYER_COUNT;
+
 int to_server, from_server;
 char** white_cards;
+char** submissions;
 char* black_card;
+int * card_choice; // rename later if you want dumbo
 int player_num;
 int czar;
-int * card_choice; // rename later if you want dumbo
 
 #include "pipe_networking.h"
 
@@ -27,15 +30,25 @@ void setup() {
   // black card memory allocation
   black_card = calloc(sizeof(char), 200);
 
+  // player submissions memory allocation
+  submissions = calloc(sizeof(char*), MAX_PLAYER_COUNT);
+
   from_server = client_handshake(&to_server);
 
-  // sets player number
+  // gets player number
   char* response = calloc(sizeof(char), 2);
   read(from_server, response, 2);
   printf("You are player #%s\n", response);
   player_num = atoi(response);
   printf("%d\n", player_num);
 
+  // sets MAX_PLAYER_COUNT
+  char* mpc_string = calloc(sizeof(char), 2);
+  read(from_server, mpc_string, 2);
+  MAX_PLAYER_COUNT = atoi(mpc_string);
+  free(mpc_string);
+
+  // gets white cards
   white_cards = calloc(sizeof(char*), 7);
   for (int i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
@@ -48,11 +61,69 @@ void setup() {
   free(response);
 }
 
-void get_czar(){
+/********************
+  CZAR FUNCTIONS
+********************/
+
+void get_czar() {
   char* response = calloc(sizeof(char), 2);
   read(from_server, response, 2);
   czar = atoi(response);
 }
+
+void get_player_submissions() {
+  // might have a lot of memory leakage here...
+  // clear previous submissions
+  memset(submissions, 0, MAX_PLAYER_COUNT);
+  int i;
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    char* t = calloc(sizeof(char), 200);
+    read(from_server, t, 200);
+    submissions[i] = t;
+  }
+}
+
+void select_winner() {
+  // loop until winner is selected
+  while (1) {
+    // display player submissions
+    printf("Black card:\n\t%s\n", black_card);
+    printf("PLAYER SUBMISSIONS\n");
+    for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+      if (i != player_num) {
+        printf("\t%d. %s\n", i, submissions[i]);
+      }
+    }
+
+    // select winner
+    printf("Winner: ");
+    // size 200 to account for player stupidity?
+    char* winner_string = calloc(sizeof(char), 200);
+    fgets(winner_string, 200, stdin);
+    errno = 0;
+    char* end = NULL;
+    long temp = strtol(winner_string, &end, 10);
+    int winner = -1;
+    if (errno != EINVAL && errno != ERANGE && temp >= INT_MIN && temp <= INT_MAX) {
+      int winner = (int) temp;
+    }
+
+    // breaks if winner is valid
+    if (winner >= 0 && winner < MAX_PLAYER_COUNT) {
+      break;
+    }
+  }
+
+  // send winner index to server
+  char* winner_string = calloc(sizeof(char), 2);
+  sprintf(winner_string, "%d", winner);
+  write(to_server, winner, 2);
+
+}
+
+/********************
+  NON-CZAR FUNCTIONS
+********************/
 
 void get_black_card() {
   printf("--------------------\n");
@@ -80,8 +151,19 @@ void submit_white_card() {
   }
 }
 
-int endgame_check() {
-  return 0;
+void endgame_check() {
+  // reading winning index, or -1 if nobody won
+  // does reading copy the memory address, or does it copy the bytes from the pipe into memory?
+  char* winner; // = calloc(sizeof(char), 10);
+  read(from_server, winner, 10);
+  int winning_index = atoi(winner);
+  free(winner);
+
+  if (winning_index != -1) {
+    // display who won and whatnot
+    exit(EXIT_SUCCESS);
+  }
+  // else it must be -1, which means nobody won, so just keep going with the rest of the code
 }
 
 void get_white_card() {
@@ -95,12 +177,16 @@ int main() {
   for (int n = 0; n < 2; n++){ // for testing purposes, runs 2 turns
   // while (1) {
     get_czar();
-    get_black_card();
-    display_white_cards();
-    submit_white_card();
-    // if (endgame_check()) {
-    //   break;
-    // }
-    get_white_card();
+    if (player_num == czar) {
+      get_player_submissions();
+      select_winning_player();
+    }
+    else {
+      get_black_card();
+      display_white_cards();
+      submit_white_card();
+      get_white_card();
+    }
+    endgame_check();
   }
 }
