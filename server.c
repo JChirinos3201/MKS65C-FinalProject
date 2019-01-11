@@ -138,12 +138,16 @@ void get_white_cards() {
       read(from_client[i], card, 200);
       cards_selected[i] = card;
     }
+    else {
+      cards_selected[i] = "i am the czar";
+    }
   }
 }
 
 void send_player_submissions() {
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++){
+    printf("writing %s\n", cards_selected[i]);
     write(to_client[czar], cards_selected[i], 200);
   }
 }
@@ -191,8 +195,10 @@ void distribute_white_cards() {
   printf("distributing white cards...\n");
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    write(to_client[i], white_deck->cards[white_deck->card_at], 200);
-    white_deck->card_at++;
+    if (i != czar) {
+      write(to_client[i], white_deck->cards[white_deck->card_at], 200);
+      white_deck->card_at++;
+    }
   }
   turn_counter++;
 }

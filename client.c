@@ -78,6 +78,7 @@ void get_czar() {
 void get_player_submissions() {
   // might have a lot of memory leakage here...
   // clear previous submissions
+  printf("YOU ARE THE CZAR\n");
   memset(submissions, 0, MAX_PLAYER_COUNT);
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
@@ -130,12 +131,12 @@ void submit_white_card() {
   card_choice = atoi(line);
   printf("sending card #%d: %s\n", card_choice, white_cards[card_choice]);
   write(to_server, white_cards[card_choice], 200);
+  printf("card sent\n");
 }
 
 void endgame_check() {
   // reading winning index, or -1 if nobody won
-  // does reading copy the memory address, or does it copy the bytes from the pipe into memory?
-  char* winner; // = calloc(sizeof(char), 10);
+  char* winner = calloc(sizeof(char), 10);
   read(from_server, winner, 10);
   int winning_index = atoi(winner);
   free(winner);
@@ -168,6 +169,6 @@ int main() {
       submit_white_card();
       get_white_card();
     }
-    endgame_check();
+    // endgame_check();
   }
 }
