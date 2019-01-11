@@ -31,6 +31,12 @@ void display_white_cards() {
   printf("\n");
 }
 
+void get_line(char * line) {
+  fgets(line, 10, stdin);
+  char * p = strchr(line, '\n');
+  if (p) *p = 0;
+}
+
 void setup() {
   // black card memory allocation
   black_card = calloc(sizeof(char), 200);
@@ -70,12 +76,15 @@ void setup() {
 ********************/
 
 void get_czar() {
+  printf("start get_czar\n");
   char* response = calloc(sizeof(char), 2);
   read(from_server, response, 2);
+  printf("read %s\n", response);
   czar = atoi(response);
 }
 
 void get_player_submissions() {
+  printf("start get_player_submissions\n");
   // might have a lot of memory leakage here...
   // clear previous submissions
   printf("YOU ARE THE CZAR\n");
@@ -84,12 +93,14 @@ void get_player_submissions() {
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* t = calloc(sizeof(char), 200);
     read(from_server, t, 200);
+    printf("read %s\n", t);
     submissions[i] = t;
     printf("player #%d submitted |%s|\n", i, submissions[i]);
   }
 }
 
 void select_winner() {
+  printf("start select_winner\n");
   int i;
   int winner;
   // loop until winner is selected
@@ -103,11 +114,13 @@ void select_winner() {
 
   // select winner
   printf("Winner: ");
-  char* winner_string = calloc(sizeof(char), 2);
-  fgets(winner_string, 2, stdin);
+  char* winner_string = calloc(sizeof(char), 10);
+  get_line(winner_string);
+  printf("read |%s| from user\n", winner_string);
 
   // send winner index to server
   write(to_server, winner_string, 2);
+  printf("wrote |%s| to server\n", winner_string);
 
 }
 
@@ -116,17 +129,14 @@ void select_winner() {
 ********************/
 
 void get_black_card() {
+  printf("start get_black_card\n");
   read(from_server, black_card, 200);
-}
-
-void get_line(char * line) {
-  fgets(line, 2, stdin);
-  char * p = strchr(line, '\n');
-  if (p) *p = 0;
+  printf("read |%s|\n", black_card);
 }
 
 void submit_white_card() {
-  char * line = calloc(sizeof(char), 2);
+  printf("start submit_white_card\n");
+  char * line = calloc(sizeof(char), 10);
   get_line(line);
   card_choice = atoi(line);
   printf("sending card #%d: %s\n", card_choice, white_cards[card_choice]);
@@ -135,9 +145,11 @@ void submit_white_card() {
 }
 
 void endgame_check() {
+  printf("start endgame_check\n");
   // reading winning index, or -1 if nobody won
   char* winner = calloc(sizeof(char), 10);
   read(from_server, winner, 10);
+  printf("read |%s|\n", winner);
   int winning_index = atoi(winner);
   free(winner);
 
@@ -149,7 +161,9 @@ void endgame_check() {
 }
 
 void get_white_card() {
+  printf("start get_white_card\n");
   read(from_server, white_cards[card_choice], 200);
+  printf("read |%s|\n", white_cards[card_choice]);
 }
 
 int main() {
@@ -169,6 +183,6 @@ int main() {
       submit_white_card();
       get_white_card();
     }
-    // endgame_check();
+    endgame_check();
   }
 }

@@ -23,7 +23,7 @@ static void sighandler(int signo) {
 }
 
 int MAX_PLAYER_COUNT = 3;
-int SCORE_CAP = 10;
+int SCORE_CAP = 2;
 
 // defining useful vars
 struct deck* black_deck;
@@ -216,9 +216,7 @@ void play() {
     send_player_submissions();
     get_round_winner();
 
-    // if (endgame_check() == -1) {
-    //   break;
-    // }
+    endgame_check();
   }
 }
 
