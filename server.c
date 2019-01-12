@@ -23,20 +23,21 @@ static void sighandler(int signo) {
 }
 
 int MAX_PLAYER_COUNT = 3;
-int SCORE_CAP = 2;
+int SCORE_CAP = 10;
 
 // defining useful vars
 struct deck* black_deck;
 struct deck* white_deck;
-int* to_client;
-int* from_client;
-int turn_counter;
-int czar;
-int* scores;
 char** names;
 char** cards_selected;
+int* to_client;
+int* from_client;
+int* scores;
+int turn_counter;
+int czar;
 
 void setup() {
+  int i;
   // seeding rand
   srand(time(NULL));
 
@@ -63,6 +64,10 @@ void setup() {
 
   // array of player scores
   scores = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    scores[i] = 0;
+  }
+
 
   // array of cards selected per round
   cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT);
@@ -77,8 +82,6 @@ void setup() {
   printf("all clients connected\n");
 
   // broadcasting ID (index in fd list) to each client
-  // (broadcasting example)
-  int i;
 
   // sends client's player #
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
@@ -103,20 +106,32 @@ void setup() {
     }
   }
 
-  // print_cards(black_deck->cards);
-  // printf("TEST BLACK: %s\n", black_deck->cards[3]);
-  // printf("TEST WHITE: %s\n", white_deck->cards[3]);
+  // get player names
+  char** names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    char* name = calloc(sizeof(char), 50);
+    read(from_client[i], name, 50);
+    names[i] = name;
+  }
+
+  // send players list of names
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    int j;
+    for (j = 0; j < MAX_PLAYER_COUNT; j++) {
+      write(to_client[i], names[j], 50);
+    }
+  }
 
 }
 
 void broadcast_czar() {
   czar = turn_counter % MAX_PLAYER_COUNT;
+  char* czar_num = calloc(sizeof(char), 2);
+  sprintf(czar_num, "%d", czar);
   for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
-    char* czar_num = calloc(sizeof(char), 2);
-    sprintf(czar_num, "%d", czar);
     write(to_client[i], czar_num, 2);
-    free(czar_num);
   }
+  free(czar_num);
 }
 
 void broadcast_black_card() {
@@ -217,6 +232,10 @@ void play() {
     get_round_winner();
 
     endgame_check();
+    int i;
+    for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+      printf("%s: %d\n", names[i], scores[i]);
+    }
   }
 }
 
