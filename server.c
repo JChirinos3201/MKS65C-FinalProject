@@ -21,8 +21,8 @@ static void sighandler(int signo) {
   }
 }
 
-int MAX_PLAYER_COUNT = 3;
-int SCORE_CAP = 2;
+int MAX_PLAYER_COUNT;
+int SCORE_CAP;
 
 // defining useful vars
 struct deck* black_deck;
@@ -35,6 +35,12 @@ int* submission_indexes;
 int turn_counter;
 int czar;
 int round_winner;
+
+void get_line(char * line) {
+  fgets(line, 10, stdin);
+  char * p = strchr(line, '\n');
+  if (p) *p = 0;
+}
 
 void setup() {
   int i;
@@ -54,6 +60,28 @@ void setup() {
   // shuffle decks
   shuffle(black_deck);
   shuffle(white_deck);
+
+  printf("\033[2J\n");
+
+  printf("GAME SETTINGS: \n\n");
+  printf("Player Limit: ");
+  char * max_players = calloc(sizeof(char), 200);
+  get_line(max_players);
+  while (atoi(max_players) < 3){
+    printf(" - 3 or more pls: ");
+    get_line(max_players);
+  }
+  MAX_PLAYER_COUNT = atoi(max_players);
+
+  printf("Score Limit: "); // should we set a limit?
+  char * score_limit = calloc(sizeof(char), 200);
+  get_line(score_limit);
+  while (atoi(score_limit) > 100){
+    printf(" - A smaller score limit pls: ");
+    get_line(score_limit);
+  }
+  SCORE_CAP = atoi(score_limit);
+
 
   // array of file descriptors for pipes to/from clients
   clients = calloc(sizeof(int), MAX_PLAYER_COUNT);
