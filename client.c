@@ -237,6 +237,7 @@ void endgame_check() {
     printf("\t---  %s IS THE WINNER!!! ---\n\n", names[winning_index]);
 
     // fireworks pls dont take these out i spent time putting this here
+    // ascii art by Joan Stark (not this Joan) on www.asciiart.eu
     printf("                                   .''.       \n");
     printf("       .''.      .        *''*    :_\\/_:     . \n");
     printf("      :_\\/_:   _\\(/_  .:.*_\\/_*   : /\\ :  .'.:.'.\n");
