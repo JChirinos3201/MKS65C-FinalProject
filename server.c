@@ -15,7 +15,7 @@ No settings; predefined values
 #include "helpers.h"
 
 static void sighandler(int signo) {
-  if (signo == SIGINT) { 
+  if (signo == SIGINT) {
     printf("\n");
     exit(EXIT_SUCCESS);
   }
@@ -56,7 +56,14 @@ void setup() {
   shuffle(white_deck);
 
   // array of file descriptors for pipes to/from clients
+<<<<<<< HEAD
   clients = calloc(sizeof(int), MAX_PLAYER_COUNT);
+=======
+  to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  from_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  listen_socket = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  client_socket = calloc(sizeof(int), MAX_PLAYER_COUNT);
+>>>>>>> 3533cce33e684795e9d040514542848e2d1ae6f6
 
   // array of player names
   names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
@@ -77,11 +84,20 @@ void setup() {
   int listen_socket = server_setup();
 
   printf("waiting for clients to connect...\n");
+<<<<<<< HEAD
   // populate client socket list
   int player_count = 0;
   while (player_count < MAX_PLAYER_COUNT) {
     clients[player_count] = server_connect(listen_socket);
     // clients[player_count] = server_handshake(clients + player_count);
+=======
+
+  // populate fd arrays
+  int player_count = 0;
+  while (player_count < MAX_PLAYER_COUNT) {
+    from_client[player_count] = server_handshake(to_client + player_count);
+    // listen_socket[]
+>>>>>>> 3533cce33e684795e9d040514542848e2d1ae6f6
     player_count++;
   }
   close(listen_socket);
