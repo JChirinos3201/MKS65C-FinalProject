@@ -33,6 +33,7 @@ char** cards_selected;
 int* to_client;
 int* from_client;
 int* scores;
+int* submission_indexes;
 int turn_counter;
 int czar;
 int round_winner;
@@ -68,6 +69,9 @@ void setup() {
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     scores[i] = 0;
   }
+
+  // array of submission indexes
+  submission_indexes = calloc(sizeof(int), MAX_PLAYER_COUNT - 1);
 
   // array of cards selected per round
   cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT);
@@ -146,12 +150,14 @@ void get_white_cards() {
   memset(cards_selected, 0, MAX_PLAYER_COUNT);
 
   // gets cards from players. czar index is left at 0
-  int i;
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+  int index = 0;
+  for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
     if (i != czar) {
       char* card = calloc(sizeof(char), 200);
       read(from_client[i], card, 200);
       cards_selected[i] = card;
+      submission_indexes[index] = i;
+      index++;
     }
     else {
       cards_selected[i] = "The Czar";
@@ -159,13 +165,33 @@ void get_white_cards() {
   }
 }
 
+// void randomize_submissions() {
+//   int i;
+//   for (i = MAX_PLAYER_COUNT - 2; i > 0; i--) {
+//     int j = rand() % (i + 1);
+//     swap(submission_indexes, i, j);
+//   }
+// }
+
+void randomize_submissions() {
+  int n = MAX_PLAYER_COUNT - 1;
+  if (n > 1) {
+    size_t i;
+    for (i = 0; i < n - 1; i++) {
+      size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+      int t = submission_indexes[j];
+      submission_indexes[j] = submission_indexes[i];
+      submission_indexes[i] = t;
+    }
+  }
+}
+
 void send_player_submissions() {
-  int i;
   printf("sending card submissions to players\n");
-  for (i = 0; i < MAX_PLAYER_COUNT; i++){
-    for (int t = 0; t < MAX_PLAYER_COUNT; t++){
+  for (int i = 0; i < MAX_PLAYER_COUNT; i++){
+    for (int index = 0; index < MAX_PLAYER_COUNT - 1; index++){
     // printf("writing %s\n", cards_selected[i]);
-    write(to_client[i], cards_selected[t], 200);
+      write(to_client[i], cards_selected[submission_indexes[index]], 200);
     }
   }
 }
@@ -174,7 +200,7 @@ void get_round_winner() {
   // get winner
   char* round_winner_string = calloc(sizeof(char), 2);
   read(from_client[czar], round_winner_string, 2);
-  round_winner = atoi(round_winner_string);
+  round_winner = submission_indexes[atoi(round_winner_string)];
 
   // increase score
   scores[round_winner]++;
@@ -241,6 +267,7 @@ void play() {
     distribute_white_cards();
 
     // for czars
+    randomize_submissions();
     send_player_submissions();
     get_round_winner();
     send_round_winner();

@@ -33,16 +33,29 @@ void display_white_cards() {
   printf("\n");
 }
 
+void get_player_submissions() {
+  // printf("start get_player_submissions\n");
+  // might have a lot of memory leakage here...
+  // clear previous submissions
+  memset(submissions, 0, MAX_PLAYER_COUNT - 1);
+  int i;
+  for (i = 0; i < MAX_PLAYER_COUNT - 1; i++) {
+    char* t = calloc(sizeof(char), 200);
+    read(from_server, t, 200);
+    // printf("read %s\n", t);
+    submissions[i] = t;
+    // printf("player #%d submitted |%s|\n", i, submissions[i]);
+  }
+}
+
 void display_submissions() {
   printf("\033[2J\n");
   int i;
   display_black_card();
   // display player submissions
   printf("\nPlayer Submissions\n");
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    if (i != czar) {
-      printf("\t%d. %s\n", i, submissions[i]);
-    }
+  for (i = 0; i < MAX_PLAYER_COUNT - 1; i++) {
+    printf("\t%d. %s\n", i, submissions[i]);
   }
 }
 
@@ -127,21 +140,6 @@ void get_czar() {
   read(from_server, response, 2);
   // printf("read %s\n", response);
   czar = atoi(response);
-}
-
-void get_player_submissions() {
-  // printf("start get_player_submissions\n");
-  // might have a lot of memory leakage here...
-  // clear previous submissions
-  memset(submissions, 0, MAX_PLAYER_COUNT);
-  int i;
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    char* t = calloc(sizeof(char), 200);
-    read(from_server, t, 200);
-    // printf("read %s\n", t);
-    submissions[i] = t;
-    // printf("player #%d submitted |%s|\n", i, submissions[i]);
-  }
 }
 
 void select_winner() {
