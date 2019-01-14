@@ -21,7 +21,7 @@ int round_winner;
 #include "pipe_networking.h"
 
 void display_black_card() {
-  printf("Black Card:\n\t%s\n", black_card);
+  printf("The black card for this round is:\n\t%s\n", black_card);
 }
 
 void display_white_cards() {
@@ -72,6 +72,9 @@ void setup() {
 
   from_server = client_handshake(&to_server);
 
+  // print initial message
+  printf("Waiting for players...\n");
+
   // gets player number
   char* response = calloc(sizeof(char), 2);
   read(from_server, response, 2);
@@ -92,6 +95,8 @@ void setup() {
   }
 
   free(response);
+
+  printf("\033[2J\n");
 
   // send name
   printf("What's your name?\nName: ");
@@ -155,7 +160,7 @@ void select_winner() {
 }
 
 void czar_status(){
-  printf("--- YOU ARE THE CZAR : Waiting For Players To Submit Cards ---\n");
+  printf("--- YOU ARE THE CZAR : Waiting For Players... ---\n");
 }
 
 /********************
@@ -216,6 +221,32 @@ void endgame_check() {
 
   if (winning_index != -1) {
     // display who won and whatnot
+    printf("\033[2J");
+
+    // print scores
+    printf("Final Scores:\n");
+    for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
+      printf("\t%s: %d Brownie Point", names[i], scores[i]);
+      if (scores[i] != 1) {
+        printf("s");
+      }
+      printf("\n");
+    }
+    printf("..................................................\n\n");
+
+    printf("\t---  %s IS THE WINNER!!! ---\n\n", names[winning_index]);
+
+    // fireworks pls dont take these out i spent time putting this here
+    printf("                                   .''.       \n");
+    printf("       .''.      .        *''*    :_\\/_:     . \n");
+    printf("      :_\\/_:   _\\(/_  .:.*_\\/_*   : /\\ :  .'.:.'.\n");
+    printf("  .''.: /\\ :   ./)\\   ':'* /\\ * :  '..'.  -=:o:=-\n");
+    printf(" :_\\/_:'.:::.    ' *''*    * '.\\'/.' _\\(/_'.':'.'\n");
+    printf(" : /\\ : :::::     *_\\/_*     -= o =-  /)\\    '  *\n");
+    printf("  '..'  ':::'     * /\\ *     .'/.\\'.   '\n");
+    printf("      *            *..*         :\n");
+    printf("      *\n\n");
+
     exit(EXIT_SUCCESS);
   }
   // else it must be -1, which means nobody won, so just keep going with the rest of the code
@@ -224,7 +255,7 @@ void endgame_check() {
 void print_screen() {
 
   // clear screen
-  printf("\033[2J\n");
+  printf("\033[2J");
 
   // generic loop counter
   int i;
@@ -232,8 +263,16 @@ void print_screen() {
   // print scores
   printf("Scores:\n");
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    printf("\t%s: %d\n", names[i], scores[i]);
+    printf("\t%s: %d Brownie Point", names[i], scores[i]);
+    if (scores[i] != 1) {
+      printf("s");
+    }
+    if (i == czar){
+      printf("\t---> CARD CZAR");
+    }
+    printf("\n");
   }
+  printf("\n");
 
   // print black card
   display_black_card();

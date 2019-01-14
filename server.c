@@ -23,7 +23,7 @@ static void sighandler(int signo) {
 }
 
 int MAX_PLAYER_COUNT = 3;
-int SCORE_CAP = 10;
+int SCORE_CAP = 2;
 
 // defining useful vars
 struct deck* black_deck;
@@ -154,7 +154,7 @@ void get_white_cards() {
       cards_selected[i] = card;
     }
     else {
-      cards_selected[i] = "i am the czar";
+      cards_selected[i] = "The Czar";
     }
   }
 }
@@ -214,6 +214,7 @@ void endgame_check() {
 
   if (winning_index != -1) {
     // display who won and whatnot
+    printf("exiting game...\n");
     exit(EXIT_SUCCESS);
   }
 }
