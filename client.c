@@ -202,7 +202,7 @@ void get_round_winner(){
   read(from_server, round_winner_string, 2);
   round_winner = atoi(round_winner_string);
 
-  printf("%s won this round!\n", names[round_winner]);
+  printf("\n%s wins this round!\n\n", names[round_winner]);
   // increase score
   scores[round_winner]++;
   free(round_winner_string);
