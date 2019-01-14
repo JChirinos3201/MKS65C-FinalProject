@@ -9,6 +9,10 @@
 #include <signal.h>
 #include <time.h>
 #include <limits.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 
 #ifndef NETWORKING_H
 #define NETWORKING_H
@@ -17,8 +21,8 @@
 #define HANDSHAKE_BUFFER_SIZE 10
 #define BUFFER_SIZE 1000
 
-#define CLIENT_TO_SERVER "Sesame"
-#define SERVER_TO_CLIENT "ClientFIFO"
+#define PORT "9001"
+#define TEST_IP "127.0.0.1"
 
 struct deck {
   char** cards;
@@ -26,8 +30,10 @@ struct deck {
   int card_at;
 };
 
-int server_handshake(int *to_client);
+void error_check(int i, char *s);
+int server_setup();
+int server_connect(int sd);
+int client_setup(char * server);
 
-int client_handshake(int *to_server);
 
 #endif
