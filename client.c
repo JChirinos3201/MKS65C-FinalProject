@@ -80,6 +80,7 @@ void setup() {
   scores = calloc(sizeof(int), MAX_PLAYER_COUNT);
 
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    // doesnt work on macs?
     scores[i] = 0;
   }
 
@@ -202,7 +203,7 @@ void get_round_winner(){
   read(from_server, round_winner_string, 2);
   round_winner = atoi(round_winner_string);
 
-  printf("\n%s wins this round!\n\n", names[round_winner]);
+  printf("\n%s wins this round!\n", names[round_winner]);
   // increase score
   scores[round_winner]++;
   free(round_winner_string);
