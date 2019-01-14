@@ -32,6 +32,8 @@ char** names;
 char** cards_selected;
 int* to_client;
 int* from_client;
+int* listen_socket; // client to server?
+int* client_socket; // server to client?
 int* scores;
 int* submission_indexes;
 int turn_counter;
@@ -60,6 +62,8 @@ void setup() {
   // array of file descriptors for pipes to/from clients
   to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
   from_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  listen_socket = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  client_socket = calloc(sizeof(int), MAX_PLAYER_COUNT);
 
   // array of player names
   names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
@@ -77,10 +81,12 @@ void setup() {
   cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT);
 
   printf("waiting for clients to connect...\n");
+
   // populate fd arrays
   int player_count = 0;
   while (player_count < MAX_PLAYER_COUNT) {
     from_client[player_count] = server_handshake(to_client + player_count);
+    // listen_socket[]
     player_count++;
   }
   printf("all clients connected\n");

@@ -9,6 +9,10 @@
 #include <signal.h>
 #include <time.h>
 #include <limits.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 
 #ifndef NETWORKING_H
 #define NETWORKING_H
@@ -16,6 +20,9 @@
 
 #define HANDSHAKE_BUFFER_SIZE 10
 #define BUFFER_SIZE 1000
+
+#define PORT "9001"
+#define TEST_IP "127.0.0.1"
 
 #define CLIENT_TO_SERVER "Sesame"
 #define SERVER_TO_CLIENT "ClientFIFO"
