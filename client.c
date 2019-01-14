@@ -7,7 +7,7 @@ Cards Against K
 
 int MAX_PLAYER_COUNT;
 
-int to_server, from_server;
+int server;
 char** white_cards;
 char** submissions;
 char** names;
@@ -41,7 +41,7 @@ void get_player_submissions() {
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT - 1; i++) {
     char* t = calloc(sizeof(char), 200);
-    read(from_server, t, 200);
+    read(server, t, 200);
     // printf("read %s\n", t);
     submissions[i] = t;
     // printf("player #%d submitted |%s|\n", i, submissions[i]);
@@ -84,27 +84,28 @@ void setup() {
     scores[i] = 0;
   }
 
-  from_server = client_handshake(&to_server);
+  // connect
+  server = client_setup(TEST_IP);
 
   // print initial message
   printf("Waiting for players...\n");
 
   // gets player number
   char* response = calloc(sizeof(char), 2);
-  read(from_server, response, 2);
+  read(server, response, 2);
   // printf("You are player #%s\n", response);
   player_num = atoi(response);
 
   // sets MAX_PLAYER_COUNT
   char* mpc_string = calloc(sizeof(char), 2);
-  read(from_server, mpc_string, 2);
+  read(server, mpc_string, 2);
   MAX_PLAYER_COUNT = atoi(mpc_string);
   free(mpc_string);
 
   // gets white cards
   for (i = 0; i < 7; i++){
     char* card = calloc(sizeof(char), 200);
-    read(from_server, card, 200);
+    read(server, card, 200);
     white_cards[i] = card;
   }
 
@@ -118,13 +119,13 @@ void setup() {
   fgets(name, 50, stdin);
   char * p = strchr(name, '\n');
   if (p) *p = 0;
-  write(to_server, name, 50);
+  write(server, name, 50);
   free(name);
 
   // gets player names
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* name = calloc(sizeof(char), 50);
-    read(from_server, name, 50);
+    read(server, name, 50);
     names[i] = name;
   }
 
@@ -138,7 +139,7 @@ void setup() {
 void get_czar() {
   // printf("start get_czar\n");
   char* response = calloc(sizeof(char), 2);
-  read(from_server, response, 2);
+  read(server, response, 2);
   // printf("read %s\n", response);
   czar = atoi(response);
 }
@@ -153,7 +154,7 @@ void select_winner() {
   // printf("read |%s| from user\n", winner_string);
 
   // send winner index to server
-  write(to_server, winner_string, 2);
+  write(server, winner_string, 2);
   // printf("wrote |%s| to server\n", winner_string);
 
 }
@@ -168,7 +169,7 @@ void czar_status(){
 
 void get_black_card() {
   // printf("start get_black_card\n");
-  read(from_server, black_card, 200);
+  read(server, black_card, 200);
   // printf("read |%s|\n", black_card);
 }
 
@@ -179,13 +180,13 @@ void submit_white_card() {
   get_line(line);
   card_choice = atoi(line);
   // printf("sending card #%d: %s\n", card_choice, white_cards[card_choice]);
-  write(to_server, white_cards[card_choice], 200);
+  write(server, white_cards[card_choice], 200);
   // printf("card sent\n");
 }
 
 void get_white_card() {
   // printf("start get_white_card\n");
-  read(from_server, white_cards[card_choice], 200);
+  read(server, white_cards[card_choice], 200);
   // printf("read |%s|\n", white_cards[card_choice]);
 }
 
@@ -200,7 +201,7 @@ void player_status(){
 void get_round_winner(){
   // get winner
   char* round_winner_string = calloc(sizeof(char), 2);
-  read(from_server, round_winner_string, 2);
+  read(server, round_winner_string, 2);
   round_winner = atoi(round_winner_string);
 
   printf("\n%s wins this round!\n", names[round_winner]);
@@ -213,7 +214,7 @@ void endgame_check() {
   // printf("start endgame_check\n");
   // reading winning index, or -1 if nobody won
   char* winner = calloc(sizeof(char), 10);
-  read(from_server, winner, 10);
+  read(server, winner, 10);
   // printf("read |%s|\n", winner);
   int winning_index = atoi(winner);
   free(winner);
@@ -237,6 +238,7 @@ void endgame_check() {
 
     // fireworks pls dont take these out i spent time putting this here
     // ascii art by Joan Stark (not this Joan) on www.asciiart.eu
+    // (Other) Joan: They're so cute I love them
     printf("                                   .''.       \n");
     printf("       .''.      .        *''*    :_\\/_:     . \n");
     printf("      :_\\/_:   _\\(/_  .:.*_\\/_*   : /\\ :  .'.:.'.\n");

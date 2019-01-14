@@ -15,8 +15,7 @@ No settings; predefined values
 #include "helpers.h"
 
 static void sighandler(int signo) {
-  if (signo == SIGINT) {
-    remove(CLIENT_TO_SERVER);
+  if (signo == SIGINT) { 
     printf("\n");
     exit(EXIT_SUCCESS);
   }
@@ -30,8 +29,7 @@ struct deck* black_deck;
 struct deck* white_deck;
 char** names;
 char** cards_selected;
-int* to_client;
-int* from_client;
+int* clients;
 int* scores;
 int* submission_indexes;
 int turn_counter;
@@ -58,8 +56,7 @@ void setup() {
   shuffle(white_deck);
 
   // array of file descriptors for pipes to/from clients
-  to_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
-  from_client = calloc(sizeof(int), MAX_PLAYER_COUNT);
+  clients = calloc(sizeof(int), MAX_PLAYER_COUNT);
 
   // array of player names
   names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
@@ -76,13 +73,18 @@ void setup() {
   // array of cards selected per round
   cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT);
 
+  // basically WKP?
+  int listen_socket = server_setup();
+
   printf("waiting for clients to connect...\n");
-  // populate fd arrays
+  // populate client socket list
   int player_count = 0;
   while (player_count < MAX_PLAYER_COUNT) {
-    from_client[player_count] = server_handshake(to_client + player_count);
+    clients[player_count] = server_connect(listen_socket);
+    // clients[player_count] = server_handshake(clients + player_count);
     player_count++;
   }
+  close(listen_socket);
   printf("all clients connected\n");
 
   // broadcasting ID (index in fd list) to each client
@@ -91,7 +93,7 @@ void setup() {
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* t = calloc(sizeof(char), 2);
     sprintf(t, "%d", i);
-    write(to_client[i], t, 2);
+    write(clients[i], t, 2);
     free(t);
   }
 
@@ -99,13 +101,13 @@ void setup() {
   char* m = calloc(sizeof(char), 2);
   sprintf(m, "%d", MAX_PLAYER_COUNT);
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    write(to_client[i], m, 2);
+    write(clients[i], m, 2);
   }
 
   // sending 7 cards to each client
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     for (int c = 0; c < 7; c++) {
-      write(to_client[i], white_deck->cards[white_deck->card_at], 200);
+      write(clients[i], white_deck->cards[white_deck->card_at], 200);
       white_deck->card_at++;
     }
   }
@@ -114,7 +116,7 @@ void setup() {
   names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* name = calloc(sizeof(char), 50);
-    read(from_client[i], name, 50);
+    read(clients[i], name, 50);
     names[i] = name;
   }
 
@@ -122,7 +124,7 @@ void setup() {
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     int j;
     for (j = 0; j < MAX_PLAYER_COUNT; j++) {
-      write(to_client[i], names[j], 50);
+      write(clients[i], names[j], 50);
     }
   }
 
@@ -133,14 +135,14 @@ void broadcast_czar() {
   char* czar_num = calloc(sizeof(char), 2);
   sprintf(czar_num, "%d", czar);
   for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
-    write(to_client[i], czar_num, 2);
+    write(clients[i], czar_num, 2);
   }
   free(czar_num);
 }
 
 void broadcast_black_card() {
   for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
-    write(to_client[i], black_deck->cards[black_deck->card_at], 200);
+    write(clients[i], black_deck->cards[black_deck->card_at], 200);
   }
   black_deck->card_at++;
 }
@@ -154,7 +156,7 @@ void get_white_cards() {
   for (int i = 0; i < MAX_PLAYER_COUNT; i++) {
     if (i != czar) {
       char* card = calloc(sizeof(char), 200);
-      read(from_client[i], card, 200);
+      read(clients[i], card, 200);
       cards_selected[i] = card;
       submission_indexes[index] = i;
       index++;
@@ -191,7 +193,7 @@ void send_player_submissions() {
   for (int i = 0; i < MAX_PLAYER_COUNT; i++){
     for (int index = 0; index < MAX_PLAYER_COUNT - 1; index++){
     // printf("writing %s\n", cards_selected[i]);
-      write(to_client[i], cards_selected[submission_indexes[index]], 200);
+      write(clients[i], cards_selected[submission_indexes[index]], 200);
     }
   }
 }
@@ -199,7 +201,7 @@ void send_player_submissions() {
 void get_round_winner() {
   // get winner
   char* round_winner_string = calloc(sizeof(char), 2);
-  read(from_client[czar], round_winner_string, 2);
+  read(clients[czar], round_winner_string, 2);
   round_winner = submission_indexes[atoi(round_winner_string)];
 
   // increase score
@@ -211,7 +213,7 @@ void send_round_winner(){
   char* round_winner_string = calloc(sizeof(char), 2);
   sprintf(round_winner_string, "%d", round_winner);
   for (int i = 0; i < MAX_PLAYER_COUNT; i++){
-    write(to_client[i], round_winner_string, 2);
+    write(clients[i], round_winner_string, 2);
   }
 }
 
@@ -232,7 +234,7 @@ void endgame_check() {
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* t = calloc(sizeof(char), 10);
     strcpy(t, winner);
-    write(to_client[i], t, 10);
+    write(clients[i], t, 10);
   }
 
   // freeing memory
@@ -250,7 +252,7 @@ void distribute_white_cards() {
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     if (i != czar) {
-      write(to_client[i], white_deck->cards[white_deck->card_at], 200);
+      write(clients[i], white_deck->cards[white_deck->card_at], 200);
       white_deck->card_at++;
     }
   }
