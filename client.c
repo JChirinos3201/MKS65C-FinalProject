@@ -16,6 +16,7 @@ int* scores;
 int card_choice; // rename later if you want dumbo
 int player_num;
 int czar;
+int round_winner;
 
 #include "pipe_networking.h"
 
@@ -30,6 +31,19 @@ void display_white_cards() {
     printf("\t%d: %s\n", i, white_cards[i]);
   }
   printf("\n");
+}
+
+void display_submissions() {
+  printf("\033[2J\n");
+  int i;
+  display_black_card();
+  // display player submissions
+  printf("\nPlayer Submissions\n");
+  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
+    if (i != czar) {
+      printf("\t%d. %s\n", i, submissions[i]);
+    }
+  }
 }
 
 void get_line(char * line) {
@@ -114,7 +128,6 @@ void get_player_submissions() {
   // printf("start get_player_submissions\n");
   // might have a lot of memory leakage here...
   // clear previous submissions
-  printf("YOU ARE THE CZAR\n");
   memset(submissions, 0, MAX_PLAYER_COUNT);
   int i;
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
@@ -128,17 +141,6 @@ void get_player_submissions() {
 
 void select_winner() {
   // printf("start select_winner\n");
-  printf("\033[2J\n");
-  int i;
-  int winner;
-  display_black_card();
-  // display player submissions
-  printf("\nPlayer Submissions\n");
-  for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    if (i != player_num) {
-      printf("\t%d. %s\n", i, submissions[i]);
-    }
-  }
 
   // select winner
   printf("\nWinner: ");
@@ -150,6 +152,10 @@ void select_winner() {
   write(to_server, winner_string, 2);
   // printf("wrote |%s| to server\n", winner_string);
 
+}
+
+void czar_status(){
+  printf("--- YOU ARE THE CZAR : Waiting For Players To Submit Cards ---\n");
 }
 
 /********************
@@ -171,7 +177,32 @@ void submit_white_card() {
   // printf("sending card #%d: %s\n", card_choice, white_cards[card_choice]);
   write(to_server, white_cards[card_choice], 200);
   // printf("card sent\n");
-  printf("Waiting for winner selection...\n");
+}
+
+void get_white_card() {
+  // printf("start get_white_card\n");
+  read(from_server, white_cards[card_choice], 200);
+  // printf("read |%s|\n", white_cards[card_choice]);
+}
+
+void player_status(){
+  printf("\nWaiting for winner selection...\n");
+}
+
+/********************
+  GAME FUNCTIONS
+********************/
+
+void get_round_winner(){
+  // get winner
+  char* round_winner_string = calloc(sizeof(char), 2);
+  read(from_server, round_winner_string, 2);
+  round_winner = atoi(round_winner_string);
+
+  printf("%s won this round!\n", names[round_winner]);
+  // increase score
+  scores[round_winner]++;
+  free(round_winner_string);
 }
 
 void endgame_check() {
@@ -190,12 +221,6 @@ void endgame_check() {
   // else it must be -1, which means nobody won, so just keep going with the rest of the code
 }
 
-void get_white_card() {
-  // printf("start get_white_card\n");
-  read(from_server, white_cards[card_choice], 200);
-  // printf("read |%s|\n", white_cards[card_choice]);
-}
-
 void print_screen() {
 
   // clear screen
@@ -207,7 +232,7 @@ void print_screen() {
   // print scores
   printf("Scores:\n");
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
-    printf("\t%s: %s\n", names[i], "please fix the score thing <3");
+    printf("\t%s: %d\n", names[i], scores[i]);
   }
 
   // print black card
@@ -228,13 +253,19 @@ void play() {
     get_black_card();
     print_screen();
     if (player_num == czar) {
+      czar_status();
       get_player_submissions();
+      display_submissions();
       select_winner();
     }
     else {
       submit_white_card();
       get_white_card();
+      get_player_submissions();
+      display_submissions();
+      player_status();
     }
+    get_round_winner();
     endgame_check();
   }
 }

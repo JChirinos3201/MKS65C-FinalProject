@@ -35,6 +35,7 @@ int* from_client;
 int* scores;
 int turn_counter;
 int czar;
+int round_winner;
 
 void setup() {
   int i;
@@ -67,7 +68,6 @@ void setup() {
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     scores[i] = 0;
   }
-
 
   // array of cards selected per round
   cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT);
@@ -107,7 +107,7 @@ void setup() {
   }
 
   // get player names
-  char** names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
+  names = calloc(sizeof(char*), MAX_PLAYER_COUNT);
   for (i = 0; i < MAX_PLAYER_COUNT; i++) {
     char* name = calloc(sizeof(char), 50);
     read(from_client[i], name, 50);
@@ -161,9 +161,12 @@ void get_white_cards() {
 
 void send_player_submissions() {
   int i;
+  printf("sending card submissions to players\n");
   for (i = 0; i < MAX_PLAYER_COUNT; i++){
-    printf("writing %s\n", cards_selected[i]);
-    write(to_client[czar], cards_selected[i], 200);
+    for (int t = 0; t < MAX_PLAYER_COUNT; t++){
+    // printf("writing %s\n", cards_selected[i]);
+    write(to_client[i], cards_selected[t], 200);
+    }
   }
 }
 
@@ -171,10 +174,19 @@ void get_round_winner() {
   // get winner
   char* round_winner_string = calloc(sizeof(char), 2);
   read(from_client[czar], round_winner_string, 2);
-  int round_winner = atoi(round_winner_string);
+  round_winner = atoi(round_winner_string);
 
   // increase score
   scores[round_winner]++;
+  free(round_winner_string);
+}
+
+void send_round_winner(){
+  char* round_winner_string = calloc(sizeof(char), 2);
+  sprintf(round_winner_string, "%d", round_winner);
+  for (int i = 0; i < MAX_PLAYER_COUNT; i++){
+    write(to_client[i], round_winner_string, 2);
+  }
 }
 
 void endgame_check() {
@@ -230,6 +242,7 @@ void play() {
     // for czars
     send_player_submissions();
     get_round_winner();
+    send_round_winner();
 
     endgame_check();
     int i;
