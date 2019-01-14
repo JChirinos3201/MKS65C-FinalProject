@@ -11,7 +11,7 @@ MVP
 No settings; predefined values
 */
 
-#include "pipe_networking.h"
+#include "networking.h"
 #include "helpers.h"
 
 static void sighandler(int signo) {

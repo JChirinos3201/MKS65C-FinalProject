@@ -18,7 +18,7 @@ int player_num;
 int czar;
 int round_winner;
 
-#include "pipe_networking.h"
+#include "networking.h"
 
 void display_black_card() {
   printf("The black card for this round is:\n\t%s\n", black_card);

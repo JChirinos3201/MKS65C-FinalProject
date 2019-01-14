@@ -1,18 +1,18 @@
 all: client server
 
-client: client.o pipe_networking.o helpers.o
-	gcc -o client client.o pipe_networking.o helpers.o
+client: client.o networking.o helpers.o
+	gcc -o client client.o networking.o helpers.o
 
-server: server.o pipe_networking.o helpers.o
-	gcc -o server server.o pipe_networking.o helpers.o
+server: server.o networking.o helpers.o
+	gcc -o server server.o networking.o helpers.o
 
-client.o: client.c pipe_networking.h
+client.o: client.c networking.h
 	gcc -c client.c
 
-server.o: server.c pipe_networking.h
+server.o: server.c networking.h
 	gcc -c server.c
 
-pipe_networking.o: pipe_networking.c pipe_networking.h
+pipe_networking.o: networking.c networking.h
 	gcc -c pipe_networking.c
 
 helpers.o: helpers.c helpers.h
