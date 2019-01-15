@@ -4,6 +4,8 @@
 ## Project Description
 StuyCS-themed Cards Against Humanity clone, written in C as a System Level Programming final project.
 
+*\* This card pack features 20 "Mr. K" white cards, as well as cards of your other favorite CS teachers! Fun for the whole class!*
+
 ## How to Run:
 #### For both client and server
 1. ```$ git clone <REPO_CLONE_URL>```
@@ -18,6 +20,8 @@ StuyCS-themed Cards Against Humanity clone, written in C as a System Level Progr
 ## Devlog
 ### 2018-12-31 -- _Joan Chirinos_
 - Added black and white cards from csv files
+### 2018-12-31 -- _Camilla Cheng_
+- Added custom cards
 ### 2019-01-04 -- _Joan Chirinos_
 - Got the basic server without client working
 ### 2019-01-04 -- _Camilla Cheng_
@@ -30,7 +34,8 @@ StuyCS-themed Cards Against Humanity clone, written in C as a System Level Progr
 - Edited white card distribution to run smoother
 ### 2019-01-08 -- _Camilla Cheng_
 - Fixed compiler errors
-- Added black card distribution displayed white cards to clients, not working
+- Added black card distribution
+- Displayed white cards to clients, not working
 ### 2019-01-08 -- _Joan Chirinos_
 - Established a foundation of methods in the ```main()```
   - This was used to lay down a groundwork of what we needed to work on, and in what order they would show up
@@ -41,7 +46,7 @@ StuyCS-themed Cards Against Humanity clone, written in C as a System Level Progr
 ### 2019-01-09 -- _Camilla Cheng_
 - Implemented Czars and czar rotation
 - Implemented card submission
-- implemented broadcasting selected cards to czar
+- Implemented broadcasting selected cards to czar
 ### 2019-01-09 -- _Joan Chirinos_
 - Finished implementing most client-side Czar functions
 - Implemented ```endgame_check()```
