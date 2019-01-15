@@ -1,3 +1,23 @@
 # CardsAgainstK
-###### By Camilla Cheng and Joan Chirinos
+###### By Camilla Cheng, Joan Chirinos
+
+## Project Description
 StuyCS-themed Cards Against Humanity clone, written in C as a System Level Programming final project.
+
+## Dev Log
+* 2018-12-31 // Joan Chirinos
+  - added black and white cards from csv files
+* 2019-01-04 // Joan Chirinos
+  - got the basic server without client working
+* 2019-01-04 // Camilla Cheng
+  - added helper functions for getting black and white cards
+  * 2019-01-07 // Camilla Cheng
+  - added white card distribution to clients
+  - server/client working, but not getting correct output/input
+* 2019-01-07 // Joan Chirinos
+  - added deck shuffling, created struct deck implementation
+  - edited white card distribution to run smoother
+* 2019-01-08 // Camilla Cheng
+  - fixed compiler errors
+  - added black card distribution displayed white cards to clients, not working
+* 2019-01-08 // Joan
