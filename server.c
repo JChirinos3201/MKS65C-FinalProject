@@ -42,7 +42,7 @@ void get_line(char * line) {
   if (p) *p = 0;
 }
 
-void setup() {
+void setup(char* ip) {
   int i;
   // seeding rand
   srand(time(NULL));
@@ -102,7 +102,7 @@ void setup() {
   cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT);
 
   // basically WKP?
-  int listen_socket = server_setup();
+  int listen_socket = server_setup(ip);
 
   printf("waiting for clients to connect...\n");
   // populate client socket list
@@ -311,7 +311,12 @@ void play() {
   }
 }
 
-int main() {
-  setup();
+int main(int argc, char* argv[]) {
+  if (argc == 2) {
+    setup(argv[1]);
+  }
+  else {
+    setup(NULL);
+  }
   play();
 }
