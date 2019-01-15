@@ -1,10 +1,12 @@
-all: client server
+all: server.o client.o networking.o helpers.o
+	gcc -o client_run client.o networking.o helpers.o
+	gcc -o server_run server.o networking.o helpers.o
 
-client: client.o networking.o helpers.o
-	gcc -o client client.o networking.o helpers.o
+server:
+	./server_run
 
-server: server.o networking.o helpers.o
-	gcc -o server server.o networking.o helpers.o
+client:
+	./client_run $(args)
 
 client.o: client.c networking.h
 	gcc -c client.c
@@ -12,11 +14,11 @@ client.o: client.c networking.h
 server.o: server.c networking.h
 	gcc -c server.c
 
-pipe_networking.o: networking.c networking.h
-	gcc -c pipe_networking.c
+networking.o: networking.c networking.h
+	gcc -c networking.c
 
 helpers.o: helpers.c helpers.h
 	gcc -c helpers.c
 
 clean:
-	-rm -f *.o *~ client server ClientFIFO Sesame /tmp/ClientFIFO /tmp/Sesame
+	-rm -f *.o *~ client_run server_run ClientFIFO Sesame /tmp/ClientFIFO /tmp/Sesame

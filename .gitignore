@@ -52,5 +52,5 @@ Mkfile.old
 dkms.conf
 
 # Our files
-server
-client
+server_run
+client_run
