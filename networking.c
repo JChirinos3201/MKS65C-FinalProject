@@ -16,7 +16,7 @@ void error_check( int i, char *s ) {
 
   returns the socket descriptor
   =========================*/
-int server_setup(char* ip) {
+int server_setup() {
   int sd, i;
 
   //create the socket
@@ -31,7 +31,6 @@ int server_setup(char* ip) {
   hints->ai_socktype = SOCK_STREAM;  //TCP socket
   hints->ai_flags = AI_PASSIVE;  //Use all valid addresses
   getaddrinfo(NULL, PORT, hints, &results); //NULL means use local address
-  printf("server ip: %s\n", ip);
 
   // bind the socket to address and port
   i = bind( sd, results->ai_addr, results->ai_addrlen );

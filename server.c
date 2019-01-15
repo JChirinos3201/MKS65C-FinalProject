@@ -102,7 +102,7 @@ void setup(char* ip) {
   cards_selected = calloc(sizeof(char*), MAX_PLAYER_COUNT);
 
   // basically WKP?
-  int listen_socket = server_setup(ip);
+  int listen_socket = server_setup();
 
   printf("waiting for clients to connect...\n");
   // populate client socket list
