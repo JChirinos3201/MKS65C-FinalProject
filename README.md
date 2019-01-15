@@ -12,8 +12,8 @@ StuyCS-themed Cards Against Humanity clone, written in C as a System Level Progr
 
 |                     For Server                    |                           For Players                           |
 | ------------------------------------------------- | --------------------------------------------------------------- |
-|       4.  ```<PATH_TO_REPO> $ make server```      |        4. ```<PATH_TO_REPO> $ make client <SERVER_IP>```        |
-| 5. Follow instructions on terminal to set up game | 5. Wait for remaining clients to join, then play CardsAgainstK! |
+|       4.  ```<PATH_TO_REPO> $ make server```      |        6. ```<PATH_TO_REPO> $ make client <SERVER_IP>```        |
+| 5. Follow instructions on terminal to set up game | 7. Wait for remaining clients to join, then play CardsAgainstK! |
 
 ## Dev Log
 * 2018-12-31 // Joan Chirinos
