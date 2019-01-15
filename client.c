@@ -65,7 +65,7 @@ void get_line(char * line) {
   if (p) *p = 0;
 }
 
-void setup() {
+void setup(char* ip) {
   int i;
 
   // clear terminal
@@ -85,7 +85,7 @@ void setup() {
   }
 
   // connect
-  server = client_setup(TEST_IP);
+  server = client_setup(ip);
 
   // print initial message
   printf("Waiting for players...\n");
@@ -311,7 +311,12 @@ void play() {
   }
 }
 
-int main() {
-  setup();
+int main(int argc, char* argv[]) {
+  if (argc == 2) {
+    setup(argv[1]);
+  }
+  else {
+    setup(TEST_IP);
+  }
   play();
 }

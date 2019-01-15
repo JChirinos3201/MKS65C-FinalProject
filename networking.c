@@ -32,17 +32,17 @@ int server_setup() {
   hints->ai_flags = AI_PASSIVE;  //Use all valid addresses
   getaddrinfo(NULL, PORT, hints, &results); //NULL means use local address
 
-  //bind the socket to address and port
+  // bind the socket to address and port
   i = bind( sd, results->ai_addr, results->ai_addrlen );
   error_check( i, "server bind" );
   printf("[server] socket bound\n");
 
-  //set socket to listen state
+  // set socket to listen state
   i = listen(sd, 10);
   error_check( i, "server listen" );
   printf("[server] socket in listen state\n");
 
-  //free the structs used by getaddrinfo
+  // free the structs used by getaddrinfo
   free(hints);
   freeaddrinfo(results);
   return sd;

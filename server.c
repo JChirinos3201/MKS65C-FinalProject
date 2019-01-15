@@ -108,6 +108,7 @@ void setup() {
   // populate client socket list
   int player_count = 0;
   while (player_count < MAX_PLAYER_COUNT) {
+    printf("waiting for %d clients...\n", MAX_PLAYER_COUNT - player_count);
     clients[player_count] = server_connect(listen_socket);
     // clients[player_count] = server_handshake(clients + player_count);
     player_count++;
