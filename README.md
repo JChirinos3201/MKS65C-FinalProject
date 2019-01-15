@@ -15,21 +15,43 @@ StuyCS-themed Cards Against Humanity clone, written in C as a System Level Progr
 |       4.  ```<PATH_TO_REPO> $ make server```      |        6. ```<PATH_TO_REPO> $ make client <SERVER_IP>```        |
 | 5. Follow instructions on terminal to set up game | 7. Wait for remaining clients to join, then play CardsAgainstK! |
 
-## Dev Log
-* 2018-12-31 // Joan Chirinos
-  - added black and white cards from csv files
-* 2019-01-04 // Joan Chirinos
-  - got the basic server without client working
-* 2019-01-04 // Camilla Cheng
-  - added helper functions for getting black and white cards
-  * 2019-01-07 // Camilla Cheng
-  - added white card distribution to clients
-  - server/client working, but not getting correct output/input
-* 2019-01-07 // Joan Chirinos
-  - added deck shuffling, created struct deck implementation
-  - edited white card distribution to run smoother
-* 2019-01-08 // Camilla Cheng
-  - fixed compiler errors
-  - added black card distribution displayed white cards to clients, not working
-* 2019-01-08 // Joan
-
+## Devlog
+### 2018-12-31 -- _Joan Chirinos_
+- added black and white cards from csv files
+### 2019-01-04 -- _Joan Chirinos_
+- got the basic server without client working
+### 2019-01-04 -- _Camilla Cheng_
+- added helper functions for getting black and white cards
+### 2019-01-07 -- _Camilla Cheng_
+- added white card distribution to clients
+- server/client working, but not getting correct output/input
+### 2019-01-07 -- _Joan Chirinos_
+- added deck shuffling, created struct deck implementation
+- edited white card distribution to run smoother
+### 2019-01-08 -- _Camilla Cheng_
+- fixed compiler errors
+- added black card distribution displayed white cards to clients, not working
+### 2019-01-08 -- _Joan Chirinos_
+ - Established a foundation of methods in the ```main()```
+   - This was used to lay down a groundwork of what we needed to work on, and in what order they would show up
+### 2019-01-09 -- _Camilla Cheng, Joan Chirinos_
+- Fixed bug caused by freeing of cards
+- Fixed parse_cards
+- Prettifyed a little
+### 2019-01-09 -- _Camilla Cheng_
+- Implemented Czars and czar rotation
+- Implemented card submission
+- implemented broadcasting selected cards to czar
+### 2019-01-09 -- _Joan Chirinos_
+- Finished implementing most client-side Czar functions
+- Implemented ```endgame_check()```
+- Tweaked function calls in ```main()```
+- Finished implementing most server-side Czar functions
+### 2019-01-10 -- _Camilla Cheng, Joan Chirinos_
+- Some groundwork on server and client
+- Cleaned some print statements
+### 2019-01-11 -- _Joan Chirinos_
+- Cleaned up printing-screen into one function
+- Implemented player names
+- Attempted to implement score
+  - Ran into a bug: scores work on Ubuntu for Windows, and Ubuntu machines (homer), but do not work on MacOS
