@@ -55,3 +55,17 @@ StuyCS-themed Cards Against Humanity clone, written in C as a System Level Progr
 - Implemented player names
 - Attempted to implement score
   - Ran into a bug: scores work on Ubuntu for Windows, and Ubuntu machines (homer), but do not work on MacOS
+### 2019-01-13 -- _Camilla Cheng_
+- Added many white cards
+- Robustified existing code
+- Prettified
+### 2019-01-14 _Camilla Cheng_
+- Added pretty fireworks
+- General beautification of prints
+- Started socketing
+- Added player, score limits
+### 2019-01-14 _Joan Chirinos_
+- Finished implementing sockets
+- Final round of testing via homer server and Camilla's laptop (works!)
+### 2019-01-15 _Camilla Cheng, Joan Chirinos_
+- Updated README xD
