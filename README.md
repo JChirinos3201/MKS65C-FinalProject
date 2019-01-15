@@ -64,13 +64,13 @@ StuyCS-themed Cards Against Humanity clone, written in C as a System Level Progr
 - Added many white cards
 - Robustified existing code
 - Prettified
-### 2019-01-14 _Camilla Cheng_
+### 2019-01-14 -- _Camilla Cheng_
 - Added pretty fireworks
 - General beautification of prints
 - Started socketing
 - Added player, score limits
-### 2019-01-14 _Joan Chirinos_
+### 2019-01-14 -- _Joan Chirinos_
 - Finished implementing sockets
 - Final round of testing via homer server and Camilla's laptop (works!)
-### 2019-01-15 _Camilla Cheng, Joan Chirinos_
+### 2019-01-15 -- _Camilla Cheng, Joan Chirinos_
 - Updated README xD
